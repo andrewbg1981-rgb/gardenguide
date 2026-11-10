@@ -1,0 +1,20 @@
+{
+  "name": "gardenguide",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GardenGuide v1: a gardening task schedule",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "test": "node --test --test-reporter=spec \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "convert-data": "python3 scripts/convert_data.py",
+    "validate-data": "node scripts/validate-data.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "typescript": "^5.9.0"
+  }
+}

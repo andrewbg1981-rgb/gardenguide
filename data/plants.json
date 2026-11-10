@@ -1,0 +1,548 @@
+{
+  "schemaVersion": 1,
+  "hemisphere": "south",
+  "source": "GardenGuide v1 data set.xlsx",
+  "plants": [
+    {
+      "id": "elkhorn_fern",
+      "name": "Elkhorn fern",
+      "category": "Epiphyte",
+      "soilType": "Epiphytic (mounted)",
+      "soilPh": {
+        "min": 5.5,
+        "max": 6.5
+      },
+      "sunExposure": "Dappled shade",
+      "tasks": [
+        {
+          "id": "task_elk_fert_1",
+          "type": "fertilising",
+          "title": "Apply liquid fertiliser",
+          "description": "Apply diluted liquid fertiliser or banana peels",
+          "months": [
+            9,
+            10,
+            11,
+            12,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "staghorn_fern",
+      "name": "Staghorn fern",
+      "category": "Epiphyte",
+      "soilType": "Epiphytic (mounted)",
+      "soilPh": {
+        "min": 5.5,
+        "max": 6.5
+      },
+      "sunExposure": "Dappled shade",
+      "tasks": [
+        {
+          "id": "task_stag_fert_1",
+          "type": "fertilising",
+          "title": "Feed with organic matter",
+          "description": "Apply liquid feed",
+          "months": [
+            9,
+            10,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "soft_tree_fern",
+      "name": "Soft tree fern",
+      "category": "Fern",
+      "soilType": "Moist rich organic well-draining",
+      "soilPh": {
+        "min": 5.5,
+        "max": 6.5
+      },
+      "sunExposure": "Dappled to full shade",
+      "tasks": [
+        {
+          "id": "task_stf_water_1",
+          "type": "watering",
+          "title": "Direct crown watering",
+          "description": "Water the crown directly in dry weather",
+          "months": [
+            12,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bird_of_paradise",
+      "name": "Bird of paradise",
+      "category": "Perennial",
+      "soilType": "Well-drained loam",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.5
+      },
+      "sunExposure": "Full sun to part shade",
+      "tasks": [
+        {
+          "id": "task_bop_prune_1",
+          "type": "pruning",
+          "title": "Remove dead flowers",
+          "description": "Remove dead flowers and old leaves",
+          "months": [
+            3,
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "giant_bop",
+      "name": "Giant bird of paradise",
+      "category": "Perennial Tree",
+      "soilType": "Well-drained rich organic",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.5
+      },
+      "sunExposure": "Full sun to part shade",
+      "tasks": [
+        {
+          "id": "task_gbop_prune_1",
+          "type": "pruning",
+          "title": "Tidy foliage",
+          "description": "Remove dead or tattered leaves",
+          "months": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "waratah",
+      "name": "Waratah",
+      "category": "Native Shrub",
+      "soilType": "Sandy extremely well-drained",
+      "soilPh": {
+        "min": 5.5,
+        "max": 6.0
+      },
+      "sunExposure": "Morning sun dappled afternoon shade",
+      "tasks": [
+        {
+          "id": "task_war_prune_1",
+          "type": "pruning",
+          "title": "Post-flower hard prune",
+          "description": "Prune hard after flowering to encourage bushy growth",
+          "months": [
+            11,
+            12
+          ]
+        },
+        {
+          "id": "task_war_fert_1",
+          "type": "fertilising",
+          "title": "Apply native fertiliser",
+          "description": "Apply low-phosphorus native fertiliser",
+          "months": [
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "protea",
+      "name": "Protea",
+      "category": "Evergreen Shrub",
+      "soilType": "Poor rocky well-drained",
+      "soilPh": {
+        "min": 5.5,
+        "max": 6.5
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_pro_prune_1",
+          "type": "pruning",
+          "title": "Cut back stems",
+          "description": "Cut back flowered stems",
+          "months": [
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "native_hibiscus",
+      "name": "Native hibiscus",
+      "category": "Native Shrub",
+      "soilType": "Well-drained sandy/loam",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_nhib_prune_1",
+          "type": "pruning",
+          "title": "Tip prune",
+          "description": "Tip prune to maintain shape and density",
+          "months": [
+            11,
+            12,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lavender",
+      "name": "Lavender",
+      "category": "Herb/Shrub",
+      "soilType": "Well-drained sandy",
+      "soilPh": {
+        "min": 6.5,
+        "max": 7.5
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_lav_prune_1",
+          "type": "pruning",
+          "title": "Formative pruning",
+          "description": "Prune back by one-third to prevent woodiness",
+          "months": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pelargonium",
+      "name": "Pelargonium",
+      "category": "Perennial",
+      "soilType": "Well-drained loam",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_pel_prune_1",
+          "type": "pruning",
+          "title": "Deadhead blooms",
+          "description": "Deadhead spent blooms",
+          "months": [
+            11,
+            12,
+            1,
+            2
+          ]
+        },
+        {
+          "id": "task_pel_prune_2",
+          "type": "pruning",
+          "title": "Rejuvenation prune",
+          "description": "Hard prune to rejuvenate",
+          "months": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hydrangea",
+      "name": "Hydrangea",
+      "category": "Deciduous Shrub",
+      "soilType": "Moist rich well-drained",
+      "soilPh": {
+        "min": 5.0,
+        "max": 7.0,
+        "note": "color dependent"
+      },
+      "sunExposure": "Morning sun afternoon shade",
+      "tasks": [
+        {
+          "id": "task_hyd_prune_1",
+          "type": "pruning",
+          "title": "Prune flowered stems",
+          "description": "Cut back old stems that have flowered",
+          "months": [
+            7,
+            8
+          ]
+        },
+        {
+          "id": "task_hyd_water_1",
+          "type": "watering",
+          "title": "Deep summer watering",
+          "description": "Deep watering to prevent wilting",
+          "months": [
+            12,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "daffodil",
+      "name": "Daffodil",
+      "category": "Bulb",
+      "soilType": "Well-drained",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "sunExposure": "Full sun to part shade",
+      "tasks": [
+        {
+          "id": "task_daf_plant_1",
+          "type": "planting",
+          "title": "Plant bulbs",
+          "description": "Plant bulbs for spring blooming",
+          "months": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "id": "task_daf_prune_1",
+          "type": "pruning",
+          "title": "Allow foliage to die",
+          "description": "Let foliage die back naturally do not cut",
+          "months": [
+            11,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arum_lily",
+      "name": "Arum lily",
+      "category": "Bulb/Rhizome",
+      "soilType": "Moist boggy or well-drained",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "sunExposure": "Full sun to part shade",
+      "tasks": [
+        {
+          "id": "task_arum_prune_1",
+          "type": "pruning",
+          "title": "Tidy foliage",
+          "description": "Remove yellowing leaves and spent flower stems",
+          "months": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canna_lily",
+      "name": "Canna lily",
+      "category": "Rhizome/Perennial",
+      "soilType": "Rich moist",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_can_prune_1",
+          "type": "pruning",
+          "title": "Cut back",
+          "description": "Cut to the ground after foliage dies back",
+          "months": [
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "passionfruit",
+      "name": "Passionfruit",
+      "category": "Climber",
+      "soilType": "Deep rich organic well-drained",
+      "soilPh": {
+        "min": 6.0,
+        "max": 6.5
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_pass_fert_1",
+          "type": "fertilising",
+          "title": "Feed high potassium",
+          "description": "Apply high-potassium fertiliser",
+          "months": [
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "id": "task_pass_prune_1",
+          "type": "pruning",
+          "title": "Thin growth",
+          "description": "Thin out excessive growth to encourage airflow",
+          "months": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bougainvillea",
+      "name": "Bougainvillea",
+      "category": "Climber/Shrub",
+      "soilType": "Well-drained",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_boug_prune_1",
+          "type": "pruning",
+          "title": "Post-flower prune",
+          "description": "Prune vigorously after flowering to maintain size",
+          "months": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "birds_nest_fern",
+      "name": "Birds nest fern",
+      "category": "Fern",
+      "soilType": "Rich organic well-draining",
+      "soilPh": {
+        "min": 5.5,
+        "max": 6.5
+      },
+      "sunExposure": "Dappled to part shade",
+      "tasks": [
+        {
+          "id": "task_bnf_water_1",
+          "type": "watering",
+          "title": "Root watering",
+          "description": "Keep root ball moist avoid watering directly into the central nest",
+          "months": [
+            12,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yucca",
+      "name": "Yucca",
+      "category": "Succulent Tree",
+      "soilType": "Sandy extremely well-drained",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.5
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_yuc_prune_1",
+          "type": "pruning",
+          "title": "Remove old leaves",
+          "description": "Remove dead lower leaves",
+          "months": [
+            3,
+            4,
+            5,
+            9,
+            10,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sunflower",
+      "name": "Sunflower",
+      "category": "Annual",
+      "soilType": "Deep well-drained loam",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.5
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_sun_plant_1",
+          "type": "planting",
+          "title": "Sow seeds",
+          "description": "Sow seeds directly into garden bed",
+          "months": [
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "id": "task_sun_water_1",
+          "type": "watering",
+          "title": "Deep watering",
+          "description": "Deep regular watering as flower heads form",
+          "months": [
+            12,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kangaroo_paw",
+      "name": "Kangaroo paw",
+      "category": "Native Perennial",
+      "soilType": "Sandy well-drained",
+      "soilPh": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "sunExposure": "Full sun",
+      "tasks": [
+        {
+          "id": "task_kang_prune_1",
+          "type": "pruning",
+          "title": "Hard prune",
+          "description": "Cut flowered stems and old leaves right down to the base",
+          "months": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  ]
+}
