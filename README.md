@@ -36,6 +36,22 @@ npm run validate-data  # check data/plants.json
 Your ticks and log are kept in the browser you use, per device. Clearing that
 browser's site data clears them.
 
+## Publishing
+
+Every push to `main` on GitHub runs `.github/workflows/deploy.yml`: install,
+test, type-check, build, and — only if all pass — publish to GitHub Pages.
+Watch progress on the repository's **Actions** tab. A failed run publishes
+nothing; the previous version stays live.
+
+```
+git add -A
+git commit -m "What changed"
+git push
+```
+
+On a phone, open the site and use **Add to Home screen** (Safari: Share menu)
+to install it. Ticks and the log are saved on that device only.
+
 ## Status
 
 - [x] Increment 0 — setup
@@ -43,4 +59,5 @@ browser's site data clears them.
 - [x] Increment 2 — schedule engine + tests
 - [x] Increment 3 — user state and storage
 - [x] Increment 4 — screens and styling
-- [ ] Increment 5 — deploy
+- [x] Increment 5 — deploy (live at https://andrewbg1981-rgb.github.io/gardenguide/)
+- [ ] Use for a month, then v2 (inventory)

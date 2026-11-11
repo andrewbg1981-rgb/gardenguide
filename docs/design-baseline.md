@@ -74,7 +74,10 @@ plants.json (plant library, read-only)      browser storage (user state)
 - Two type-check configs: `tsconfig.json` (core, storage, scripts — no browser types)
   and `tsconfig.ui.json` (screens). `npm run typecheck` runs both.
 - `package-lock.json` is committed so every install gets the same package versions.
-- Git + GitHub; hosting on GitHub Pages.
+- Git + GitHub; hosting on GitHub Pages (public repository and site; no personal
+  data is published — user state stays in each browser, D-09).
+- GitHub Actions (`.github/workflows/deploy.yml`) runs `npm ci`, tests, type-check
+  and build on every push to `main`; it deploys only if all pass.
 
 ## Increments
 
@@ -83,4 +86,4 @@ plants.json (plant library, read-only)      browser storage (user state)
 2. Schedule engine + tests.
 3. User state and storage module. ✅
 4. UI — Active tasks screen, Log screen, styling. ✅
-5. Deploy and use for a month; then v2 (inventory).
+5. Deploy ✅ — then use for a month; then v2 (inventory).

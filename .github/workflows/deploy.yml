@@ -1,0 +1,48 @@
+# GitHub Actions: on every push to main, GitHub runs this on a fresh Linux
+# machine — install, test, type-check, build — and only if all of that passes,
+# publishes the built app (dist/) to GitHub Pages.
+# Hardware analogy: an automated production test station. Nothing ships
+# unless it passes the same checks you run at your desk.
+
+name: Test and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: read            # read the code
+  pages: write              # publish to Pages
+  id-token: write           # prove to Pages that this run is genuine
+
+concurrency:                # one deployment at a time; never cancel one halfway
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci                 # exact versions from package-lock.json
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build          # also validates data/plants.json
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
