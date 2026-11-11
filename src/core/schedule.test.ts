@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  activeTasks, completeTask, createInitialState, earliestFirst, instanceKey, isExpired, logExpired, logNewestFirst,
+  activeTasks, completeTask, createInitialState, describeLogEntry, earliestFirst, instanceKey, isExpired, logExpired,
+  logNewestFirst, timing, undoComplete,
 } from './schedule.ts';
 import { toAbs } from './months.ts';
 import { d, deepFreeze, libraryWith, realLibrary } from './test-helpers.ts';
@@ -262,4 +263,47 @@ test('TD-01: with the real database on 11 Nov 2026, the list matches a hand chec
     'task_arum_prune_1 2027-01', // Jan–Feb, Arum lily
     'task_kang_prune_1 2027-01', // Jan–Mar
   ]);
+});
+
+// ---------- D-12: undo ----------
+
+test('D-12: undoing a tick makes the task active again', () => {
+  const lib = libraryWith({ nov: [11] });
+  const s = createInitialState(lib, d(2026, 11));
+  const ticked = completeTask(lib, s, key('nov', 2026, 11), d(2026, 11));
+  const undone = undoComplete(ticked, key('nov', 2026, 11));
+  assert.deepEqual(keys(activeTasks(lib, undone, d(2026, 11))), [key('nov', 2026, 11)]);
+});
+
+test('D-12: undo only removes "complete" entries — skipped history stays', () => {
+  const lib = libraryWith({ nov: [11] });
+  const s = logExpired(lib, createInitialState(lib, d(2026, 11)), d(2027, 1)).state;
+  assert.equal(undoComplete(s, key('nov', 2026, 11)), s);
+});
+
+// ---------- LG-03: naming log entries ----------
+
+test('LG-03: a log entry is shown with its plant name and task title', () => {
+  const lib = realLibrary();
+  const s = createInitialState(lib, d(2026, 11, 11));
+  const k = instanceKey('waratah', 'task_war_prune_1', toAbs(2026, 11));
+  const done = completeTask(lib, s, k, d(2026, 11, 11));
+  assert.deepEqual(describeLogEntry(lib, done, done.log[0]!),
+    { plantName: 'Waratah', taskTitle: 'Post-flower hard prune', taskType: 'pruning' });
+});
+
+test('LG-03: a log entry whose plant has left the library still shows (by its ids)', () => {
+  const lib = libraryWith({ nov: [11] });
+  const s = completeTask(lib, createInitialState(lib, d(2026, 11)), key('nov', 2026, 11), d(2026, 11));
+  assert.deepEqual(describeLogEntry(libraryWith({ other: [1] }), s, s.log[0]!),
+    { plantName: 'nov', taskTitle: 'nov_task', taskType: null });
+});
+
+// ---------- TL-01: timing labels ----------
+
+test('TL-01: each active task is labelled overdue, now or upcoming (across New Year)', () => {
+  const lib = libraryWith({ nov: [11], dec: [12, 1], feb: [2] });
+  const s = createInitialState(lib, d(2026, 12));
+  const labels = activeTasks(lib, s, d(2026, 12)).map((t) => `${t.plant.id} ${timing(t, d(2026, 12))}`);
+  assert.deepEqual(labels, ['nov overdue', 'dec now', 'feb upcoming']);
 });

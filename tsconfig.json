@@ -1,6 +1,8 @@
 {
+  "//": "Core, storage, scripts and tests. No browser (DOM) types, so the core cannot use them (D-13).",
   "compilerOptions": {
     "target": "ES2022",
+    "lib": ["ES2022"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "strict": true,
@@ -12,5 +14,6 @@
     "noUncheckedIndexedAccess": true,
     "types": ["node"]
   },
-  "include": ["src", "scripts"]
+  "include": ["src", "scripts"],
+  "exclude": ["src/ui"]
 }

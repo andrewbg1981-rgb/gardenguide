@@ -49,13 +49,19 @@ export interface PlantLibrary {
 export interface MyPlant {
   id: string;
   speciesId: string;
+  /**
+   * D-11: the day this plant was added, 'YYYY-MM-DD'. Expired tasks are only
+   * logged from this date on. Missing for plants added on the first day.
+   */
+  addedOn?: string;
 }
 
 /**
  * What finally happened to a task instance (D-05).
  * v10 will add 'assumed' for routine tasks that auto-advance.
  */
-export type LogStatus = 'complete' | 'skipped';
+export const LOG_STATUSES = ['complete', 'skipped'] as const;
+export type LogStatus = (typeof LOG_STATUSES)[number];
 
 /** A date with no time zone: { year: 2026, month: 11, day: 11 }. */
 export interface CalendarDate {

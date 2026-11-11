@@ -11,11 +11,18 @@ plants.json (plant library, read-only)      browser storage (user state)
         ▼                                         ▼
  ┌──────────────── core (pure logic, no UI, no browser) ────────────────┐
  │ windows · task instances · active list · complete · expire · log    │
- │ ordering rule (swappable)                                            │
+ │ ordering rule (swappable) · user-state checks · undo                 │
  └──────────────────────────────────────────────────────────────────────┘
         ▲                                         ▲
-   UI screens (increment 4)               storage module (increment 3)
+   UI screens (src/ui)                    storage module (src/storage)
+   reads the clock, renders               load · save · open session · tick
 ```
+
+- `src/storage/session.ts` is what the screens call: `openSession` (load or
+  create, add new library plants, log expired tasks, save), `tickTask`, `untickTask`.
+- Saved state is validated on load. Unreadable data is copied to
+  `gardenguide.userState.unreadable.<date>` before starting afresh, never discarded.
+- If the browser refuses to save, the app keeps working for that visit and says so.
 
 - The **core** never reads the clock: "today" is always passed in, so any date can be tested.
 - The core never touches browser storage: a storage module loads/saves user state.
@@ -34,13 +41,18 @@ plants.json (plant library, read-only)      browser storage (user state)
 | D-08 | Active-list ordering is one replaceable function (v1: earliest start, then earliest end, then plant name, then task title). | v10 urgency ranking (acute → milestones → routine). |
 | D-09 | All saving/loading goes through one storage module (v1: localStorage). | Swap for IndexedDB or cloud sync later. |
 | D-10 | Soil pH is stored as numbers `{min, max, note}`; files carry `schemaVersion`. | v10 suitability checks compare numbers; versions allow safe data migration. |
+| D-11 | *(added in increment 3)* Each of My plants may carry `addedOn`. A plant added to the library after first use joins My plants automatically, dated that day, and its expired tasks are only logged from that date (D-06 applied per plant). Plants removed from the library stay in My plants so their log entries still read correctly. | Adding a plant to the spreadsheet must not flood the log with "skipped". v2 inventory sets `addedOn` when the user adds a plant. |
+| D-12 | *(added in increment 4)* A tick can be undone: briefly by un-ticking while it fades out, then by an Undo bar for a few seconds. Undo removes the `complete` log entry; `skipped` entries are never removed. | Phones make accidental taps easy; the log (D-05) must stay trustworthy. |
+| D-13 | *(added in increment 3)* Layering is checked by tests: `src/core` never reads the clock, the DOM or browser storage; `src/storage` is handed a store rather than reaching for `localStorage`; only `src/ui` reads the clock (`clock.ts`). The core is type-checked without browser types. | Keeps the core testable at any date and portable to a phone app. |
 
 ## Styling (from tab "5. Styling")
 
 - Background: charcoal green `#272C28`.
 - **All text: warm cream `#E8E2D0`** (for now). Clickable text may get its own colour later.
 - Font: Lato (bundled with the app for offline use). Headings: light weight, spaced capitals.
-- Palette roles (colours used as fills/borders/tags, with cream text):
+- Palette roles (colours used as fills/borders/tags, with cream text). Cream text on
+  the light fills (Wattle, Hibiscus) is hard to read, so tags use the colour as a dot
+  and border, and skipped log entries use Hibiscus as a stripe and tint:
 
 | Colour | Hex | Role |
 |---|---|---|
@@ -57,7 +69,11 @@ plants.json (plant library, read-only)      browser storage (user state)
 ## Tooling
 
 - TypeScript; core tests use Node's built-in test runner (`node --test`), no extra packages.
-- UI (increment 4): Vite + React, packaged as an installable web app (PWA).
+- UI (increment 4): Vite + React, packaged as an installable web app (PWA) with a
+  hand-written manifest and service worker (no PWA plugin). Lato via `@fontsource/lato`.
+- Two type-check configs: `tsconfig.json` (core, storage, scripts — no browser types)
+  and `tsconfig.ui.json` (screens). `npm run typecheck` runs both.
+- `package-lock.json` is committed so every install gets the same package versions.
 - Git + GitHub; hosting on GitHub Pages.
 
 ## Increments
@@ -65,6 +81,6 @@ plants.json (plant library, read-only)      browser storage (user state)
 0. Setup — repo, `CLAUDE.md`, requirement IDs, this baseline.
 1. Data — spreadsheet → `data/plants.json`, with a validator.
 2. Schedule engine + tests.
-3. User state and storage module.
-4. UI — Active tasks screen, Log screen, styling.
+3. User state and storage module. ✅
+4. UI — Active tasks screen, Log screen, styling. ✅
 5. Deploy and use for a month; then v2 (inventory).

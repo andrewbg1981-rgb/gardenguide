@@ -4,7 +4,7 @@
 
 import { absToString, dateToAbs, dateToString, parseDate, absYear, toAbs } from './months.ts';
 import type {
-  CalendarDate, LogEntry, LogStatus, MyPlant, PlantLibrary, PlantSpecies, TaskInstance, UserState,
+  CalendarDate, LogEntry, LogStatus, MyPlant, PlantLibrary, PlantSpecies, TaskInstance, TaskType, UserState,
 } from './types.ts';
 import { monthWindows } from './windows.ts';
 
@@ -73,6 +73,17 @@ export function activeTasks(
     .sort(order);
 }
 
+/**
+ * TL-01: where an active task sits relative to today, for display:
+ * 'overdue' (window ended, still in the grace month), 'now' (today is in the
+ * window) or 'upcoming' (starts within the next two months).
+ */
+export type Timing = 'overdue' | 'now' | 'upcoming';
+export function timing(t: TaskInstance, today: CalendarDate): Timing {
+  const now = dateToAbs(today);
+  return now > t.end ? 'overdue' : now < t.start ? 'upcoming' : 'now';
+}
+
 /** TL-03: has this instance's window passed by more than the grace period? */
 export function isExpired(t: TaskInstance, today: CalendarDate): boolean {
   return dateToAbs(today) > t.end + GRACE_MONTHS;
@@ -102,9 +113,13 @@ export function logExpired(
   const firstTrackedEnd = trackingAbs - GRACE_MONTHS;
   if (lastExpiredEnd < firstTrackedEnd) return { state, added: [] };
 
+  // D-11: a plant added later is only tracked from the day it was added.
+  const firstTrackedEndFor = (plant: MyPlant) =>
+    plant.addedOn ? Math.max(firstTrackedEnd, dateToAbs(parseDate(plant.addedOn)) - GRACE_MONTHS) : firstTrackedEnd;
+
   const logged = new Set(state.log.map((e) => e.key));
   const added = instancesOverlapping(library, state.myPlants, firstTrackedEnd, lastExpiredEnd)
-    .filter((t) => t.end >= firstTrackedEnd && t.end <= lastExpiredEnd && !logged.has(t.key))
+    .filter((t) => t.end >= firstTrackedEndFor(t.plant) && t.end <= lastExpiredEnd && !logged.has(t.key))
     .sort(earliestFirst)
     .map((t) => logEntry(t, 'skipped', today));
 
@@ -118,6 +133,29 @@ export function completeTask(
   const task = activeTasks(library, state, today).find((t) => t.key === key);
   if (!task) throw new Error(`Task ${key} is not active, so it cannot be completed`);
   return { ...state, log: [...state.log, logEntry(task, 'complete', today)] };
+}
+
+/**
+ * D-12: undo a tick made by mistake. Removes the 'complete' entry so the task
+ * is active again (if its window is still active). 'skipped' entries stay.
+ */
+export function undoComplete(state: UserState, key: string): UserState {
+  const log = state.log.filter((e) => !(e.key === key && e.status === 'complete'));
+  return log.length === state.log.length ? state : { ...state, log };
+}
+
+/** LG-03: names for a log entry. Falls back to the stored ids if the plant or task has left the library. */
+export function describeLogEntry(
+  library: PlantLibrary, state: UserState, entry: LogEntry,
+): { plantName: string; taskTitle: string; taskType: TaskType | null } {
+  const plant = state.myPlants.find((p) => p.id === entry.plantId);
+  const species = library.plants.find((s) => s.id === (plant?.speciesId ?? entry.plantId));
+  const task = species?.tasks.find((t) => t.id === entry.taskId);
+  return {
+    plantName: species?.name ?? entry.plantId,
+    taskTitle: task?.title ?? entry.taskId,
+    taskType: task?.type ?? null,
+  };
 }
 
 /** LG-03: the log for display, most recent first. */
