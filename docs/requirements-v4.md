@@ -1,4 +1,4 @@
-# GardenGuide v4 — Requirements (draft A)
+# GardenGuide v4 — Requirements (draft B)
 
 v4 is GardenGuide fitted to one garden and one user: a holiday-home garden at
 Skenes Creek, Victoria. It sits between v1 (task rhythm, delivered) and the v10
@@ -46,7 +46,7 @@ properties; the user is not asked to enter them.
 | ID | Fact |
 |---|---|
 | SC-01 | Location: Skenes Creek, Victoria (Otway coast), about 150 m from the ocean. Southern hemisphere; months are Victorian months (D-07). |
-| SC-02 | Exposure: strong southerly winds and north-westerlies; salt-laden coastal air. |
+| SC-02 | Exposure: strong southerly winds and north-westerlies; salt-laden coastal air. The backyard (Fruit zone) is sheltered by surrounding foliage (owner, 13 Nov 2026). Wind and salt exposure per zone are estimates until the owner confirms them (ZN-03). |
 | SC-03 | Orientation: on the site plan, north points to the top-left at 45°. So the top edge faces north-east, the left side north-west and the bottom south-west. |
 | SC-04 | Fall: the front yard (left, north-west) is about 5 m higher than the backyard (right, south-east). |
 | SC-05 | Irrigation: a watering system serves the tree ferns, elkhorn and staghorns only. All other plants rely on rain. |
@@ -65,8 +65,8 @@ Status: **v2**, **v3** or **v4** is the version expected to deliver it. Type: **
 | KB-02 | **Pruning tolerance** shall state how hard a plant can be cut without lasting harm, in three levels: *light* (tips and spent growth only; do not cut into old bare wood), *moderate* (up to about one third), *hard* (can be cut back heavily or to old wood to renew). Each level is shown with the specific rule for that plant. | Shall | v2 | C-03 |
 | KB-03 | Each task shall carry: how to do it, how much (where relevant), materials needed (for the shopping list, PL-01), and the consequence of missing it. | Shall | v2 | C-03, C-04 |
 | KB-04 | Each task shall be classed **critical** (missing it is a likely cause of decline or loss, or loses a season) or **routine**, with a one-line reason. | Shall | v2 | C-04, P-06 |
-| KB-05 | Each guidance value shall record its source and a confidence level (P-05). | Shall | v2 | C-04 |
-| KB-06 | The database shall continue to be edited only in the spreadsheet and converted to JSON (existing rule), with new tabs for Zones and Wishlist. | Shall | v2 | — |
+| KB-05 | Guidance shall record its source(s) and a confidence level (P-05), per plant and per task. | Shall | v2 | C-04 |
+| KB-06 | The database shall continue to be edited only in the spreadsheet (`data/source/GardenGuide plant database.xlsx`) and converted to JSON, with tabs for Plants, Tasks, Zones and Wishlist. | Shall | v2 | — |
 
 ### 4.2 Zones and map (ZN)
 
@@ -74,9 +74,10 @@ Status: **v2**, **v3** or **v4** is the version expected to deliver it. Type: **
 |---|---|---|---|---|
 | ZN-01 | The garden shall be divided into named zones (SC-07), including deck pot groups as **container** zones. | Shall | v2 | C-01, C-02 |
 | ZN-02 | A map screen shall show the site plan with zone outlines. Selecting a zone lists its plants and their current tasks. | Shall | v2 | C-09, C-10 |
-| ZN-03 | Each zone shall record: sun (aspect and approximate hours, summer and winter), wind and salt exposure, irrigation (yes/no), and soil (pH, texture, drainage; "unknown" allowed). Values are pre-filled from site context (SC-01–SC-05) and can be refined. | Shall | v2 | C-01, C-02, C-05 |
+| ZN-03 | Each zone shall record: sun as the portion of the day in direct sun (a range in %, one level per zone), wind and salt exposure, each marked as estimated or confirmed by the owner, and soil (pH, texture, drainage; "unknown" allowed). Irrigation is recorded per plant (SC-05), not per zone. | Shall | v2 | C-01, C-02, C-05 |
 | ZN-04 | GardenGuide should offer an optional soil survey guide per zone: pH test kit, jar test (texture), percolation test (drainage). It explains what each result means for planting and stores dated results if entered. It is never required (P-01). | Should | v4 | C-05 |
 | ZN-05 | Zone outlines should be editable in the app. Until then they are drawn from the owner's plan. | Should | v4 | C-10 |
+| ZN-06 | Sun should be able to vary within a zone (e.g. sub-areas or per-plant sun), since one zone can contain both sun and shade. | Should | v5+ | C-01 |
 
 ### 4.3 Tasks (TK) — revises v1 task logic
 
@@ -163,10 +164,18 @@ Status: **v2**, **v3** or **v4** is the version expected to deliver it. Type: **
 | v3 | Plan the visit | TK-05, PL-01–03, DV-03 (sync decision) |
 | v4 | Grow with confidence | PH-01–03, WL-01–05, ZN-04–05, SO-01–02, DV-04 |
 
-## 8. Open questions
+## 8. Decisions on open questions
 
-| ID | Question |
+| ID | Question | Decision (owner, 13 Nov 2026) |
+|---|---|---|
+| Q-01 | Sync method for DV-03 | A file in OneDrive, for now. |
+| Q-02 | Sun per zone | An estimate, given as the portion of the day in full sun (hours change through the year). One sun level per zone for now; variation within a zone is ZN-06 (v5+). Floral up to 100%; Shade 0–20%; Vegetable ~50%; Fruit 50–100%; Tropical ~50%; Front deck 100%; Middle deck 50%; Back deck 50%; Quarter deck (under the back deck) 0%. |
+| Q-03 | Which plants are in which zone | The owner fills in the Zone column of the Plants tab. |
+
+## 9. Verification (v2)
+
+| ID | Verified by |
 |---|---|
-| Q-01 | Sync method for DV-03 (e.g. a file in OneDrive, or a small hosted service). Decide at the start of v3. |
-| Q-02 | Sun hours per zone: estimate from the plan and orientation (SC-03), or observe on site once. |
-| Q-03 | Which current plants live in which zone. Needed to fill KB-01 "zone". |
+| KB-01, KB-02, KB-03, KB-04, KB-05 | `library.test.ts` (data checks and validator) |
+| KB-06 | `scripts/convert_data.py` (reads the four tabs; reports problems by tab and row) |
+| ZN-01, ZN-03 | `library.test.ts` |

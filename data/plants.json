@@ -1,480 +1,1806 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "hemisphere": "south",
-  "source": "GardenGuide v1 data set.xlsx",
+  "location": "Skenes Creek, Victoria",
+  "source": "GardenGuide plant database.xlsx",
+  "zones": [
+    {
+      "id": "floral",
+      "name": "Floral",
+      "theme": "Front yard: flowering plants",
+      "container": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Owner: up to 100% of the day in full sun. Minimum 75% assumed; confirm."
+      },
+      "wind": {
+        "level": "exposed",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": null,
+        "drainage": null,
+        "surveyedOn": null
+      },
+      "notes": "North-west side, about 5 m higher than the backyard; faces the north-westerlies."
+    },
+    {
+      "id": "shade",
+      "name": "Shade",
+      "theme": "Shade planting along the north-east boundary",
+      "container": false,
+      "sun": {
+        "min": 0,
+        "max": 20,
+        "note": "Owner: 0 to about 20% of the day."
+      },
+      "wind": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": null,
+        "drainage": null,
+        "surveyedOn": null
+      },
+      "notes": "Shaded by boundary trees."
+    },
+    {
+      "id": "tropical",
+      "name": "Tropical",
+      "theme": "Tropical planting beside the middle deck",
+      "container": false,
+      "sun": {
+        "min": 50,
+        "max": 50,
+        "note": "Owner: about 50% of the day."
+      },
+      "wind": {
+        "level": "sheltered",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": null,
+        "drainage": null,
+        "surveyedOn": null
+      },
+      "notes": "North-east side of the house, which blocks the southerlies."
+    },
+    {
+      "id": "vegetable",
+      "name": "Vegetable",
+      "theme": "Vegetable bed",
+      "container": false,
+      "sun": {
+        "min": 50,
+        "max": 50,
+        "note": "Owner: about 50% of the day."
+      },
+      "wind": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": null,
+        "drainage": null,
+        "surveyedOn": null
+      },
+      "notes": "North-east side of the house."
+    },
+    {
+      "id": "fruit",
+      "name": "Fruit",
+      "theme": "Backyard: fruit",
+      "container": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Owner: 50–100% of the day."
+      },
+      "wind": {
+        "level": "sheltered",
+        "confirmed": true
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": null,
+        "drainage": null,
+        "surveyedOn": null
+      },
+      "notes": "Owner (13 Nov 2026): less windy than expected, sheltered by surrounding foliage."
+    },
+    {
+      "id": "front_deck",
+      "name": "Front deck",
+      "theme": "Pots on the front (west) deck",
+      "container": true,
+      "sun": {
+        "min": 100,
+        "max": 100,
+        "note": "Owner: 100% of the day."
+      },
+      "wind": {
+        "level": "exposed",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": "potting mix",
+        "drainage": "good",
+        "surveyedOn": null
+      },
+      "notes": "Container zone."
+    },
+    {
+      "id": "middle_deck",
+      "name": "Middle deck",
+      "theme": "Pots on the middle deck",
+      "container": true,
+      "sun": {
+        "min": 50,
+        "max": 50,
+        "note": "Owner: about 50% of the day."
+      },
+      "wind": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": "potting mix",
+        "drainage": "good",
+        "surveyedOn": null
+      },
+      "notes": "Container zone."
+    },
+    {
+      "id": "back_deck",
+      "name": "Back deck",
+      "theme": "Pots on the back deck",
+      "container": true,
+      "sun": {
+        "min": 50,
+        "max": 50,
+        "note": "Owner: about 50% of the day."
+      },
+      "wind": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "moderate",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": "potting mix",
+        "drainage": "good",
+        "surveyedOn": null
+      },
+      "notes": "Container zone."
+    },
+    {
+      "id": "quarter_deck",
+      "name": "Quarter deck",
+      "theme": "Under the back deck (marked 'shade' on the map)",
+      "container": true,
+      "sun": {
+        "min": 0,
+        "max": 0,
+        "note": "Owner: 0% (full shade)."
+      },
+      "wind": {
+        "level": "sheltered",
+        "confirmed": false
+      },
+      "salt": {
+        "level": "low",
+        "confirmed": false
+      },
+      "soil": {
+        "ph": null,
+        "texture": "potting mix",
+        "drainage": "good",
+        "surveyedOn": null
+      },
+      "notes": "Container zone."
+    }
+  ],
   "plants": [
     {
       "id": "elkhorn_fern",
       "name": "Elkhorn fern",
+      "botanicalName": "Platycerium bifurcatum",
       "category": "Epiphyte",
-      "soilType": "Epiphytic (mounted)",
-      "soilPh": {
-        "min": 5.5,
-        "max": 6.5
+      "zone": null,
+      "irrigated": true,
+      "sun": {
+        "min": 10,
+        "max": 50,
+        "note": "Dappled shade"
       },
-      "sunExposure": "Dappled shade",
+      "soil": {
+        "ph": {
+          "min": 5.5,
+          "max": 6.5
+        },
+        "texture": "epiphytic",
+        "drainage": "sharp",
+        "note": "Mounted on a board or tree"
+      },
+      "size": {
+        "heightM": 1,
+        "widthM": 1,
+        "spacingM": null
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "low",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Dilute liquid fertiliser monthly in the warm months.",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Leave the brown shield fronds at the base; they protect the roots. Remove only dead hanging fronds."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": null,
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_elk_fert_1",
           "type": "fertilising",
-          "title": "Apply liquid fertiliser",
-          "description": "Apply diluted liquid fertiliser or banana peels",
+          "title": "Liquid feed",
+          "description": "Apply dilute liquid fertiliser to the fronds and shield, monthly through the warm months.",
           "months": [
-            9,
             10,
             11,
             12,
             1,
-            2
-          ]
+            2,
+            3
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Half the label strength",
+          "materials": [
+            "Liquid fertiliser"
+          ],
+          "ifMissed": "Slower growth; no lasting harm.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "staghorn_fern",
       "name": "Staghorn fern",
+      "botanicalName": "Platycerium superbum",
       "category": "Epiphyte",
-      "soilType": "Epiphytic (mounted)",
-      "soilPh": {
-        "min": 5.5,
-        "max": 6.5
+      "zone": null,
+      "irrigated": true,
+      "sun": {
+        "min": 10,
+        "max": 50,
+        "note": "Dappled shade"
       },
-      "sunExposure": "Dappled shade",
+      "soil": {
+        "ph": {
+          "min": 5.5,
+          "max": 6.5
+        },
+        "texture": "epiphytic",
+        "drainage": "sharp",
+        "note": "Mounted on a board or tree"
+      },
+      "size": {
+        "heightM": 1.5,
+        "widthM": 1.5,
+        "spacingM": null
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "low",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Organic matter tucked behind the upper shield fronds, or dilute liquid fertiliser, in the warm months.",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Leave the shield fronds; they are meant to brown off. Remove only dead hanging fronds."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": null,
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_stag_fert_1",
           "type": "fertilising",
           "title": "Feed with organic matter",
-          "description": "Apply liquid feed",
+          "description": "Tuck leaf litter, compost or banana peel behind the upper shield fronds, or apply dilute liquid fertiliser.",
           "months": [
-            9,
             10,
-            11
-          ]
+            11,
+            12,
+            1
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "A handful of organic matter, or half-strength liquid feed",
+          "materials": [
+            "Liquid fertiliser",
+            "compost"
+          ],
+          "ifMissed": "Slower growth; no lasting harm.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "soft_tree_fern",
       "name": "Soft tree fern",
+      "botanicalName": "Dicksonia antarctica",
       "category": "Fern",
-      "soilType": "Moist rich organic well-draining",
-      "soilPh": {
-        "min": 5.5,
-        "max": 6.5
+      "zone": null,
+      "irrigated": true,
+      "sun": {
+        "min": 0,
+        "max": 40,
+        "note": "Dappled to full shade"
       },
-      "sunExposure": "Dappled to full shade",
+      "soil": {
+        "ph": {
+          "min": 5.5,
+          "max": 6.5
+        },
+        "texture": "loam",
+        "drainage": "moist",
+        "note": "Moist, rich, organic, free-draining"
+      },
+      "size": {
+        "heightM": 4,
+        "widthM": 4,
+        "spacingM": 2
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "low",
+        "frost": "hardy",
+        "waterlogging": "moderate",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Rarely needed; a layer of leaf litter or compost around the base in spring.",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Cut off only dead, hanging fronds. Never cut the crown."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": null,
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_stf_water_1",
           "type": "watering",
-          "title": "Direct crown watering",
-          "description": "Water the crown directly in dry weather",
+          "title": "Water trunk and crown",
+          "description": "Wet the full length of the trunk and the crown in dry weather. Check the watering system reaches the trunk, not just the ground.",
           "months": [
             12,
             1,
-            2
-          ]
+            2,
+            3
+          ],
+          "critical": true,
+          "criticalReason": "The trunk is the root system; if it dries out in summer the fern can die.",
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Fronds brown off; a dried-out trunk can kill the fern.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "bird_of_paradise",
       "name": "Bird of paradise",
+      "botanicalName": "Strelitzia reginae",
       "category": "Perennial",
-      "soilType": "Well-drained loam",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.5
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
       },
-      "sunExposure": "Full sun to part shade",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.5
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Well-drained loam"
+      },
+      "size": {
+        "heightM": 1.2,
+        "widthM": 1.2,
+        "spacingM": 1
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Controlled-release or organic fertiliser in spring.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Remove spent flower stems and dead leaves at the base."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Spent flower stems rot and look untidy; cut them at the base."
+      },
+      "harvest": null,
+      "cautions": null,
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_bop_prune_1",
           "type": "pruning",
-          "title": "Remove dead flowers",
-          "description": "Remove dead flowers and old leaves",
+          "title": "Remove spent flowers and dead leaves",
+          "description": "Cut spent flower stems and dead leaves off at the base. Can also be done whenever spent flowers are seen.",
           "months": [
-            3,
-            4,
-            5
-          ]
+            11,
+            12
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy; no harm.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "task_bop_fert_1",
+          "type": "fertilising",
+          "title": "Spring feed",
+          "description": "Scatter controlled-release or organic fertiliser around the clump and water in.",
+          "months": [
+            9,
+            10,
+            11
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "As per label",
+          "materials": [
+            "Controlled-release fertiliser"
+          ],
+          "ifMissed": "Fewer flowers.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "giant_bop",
       "name": "Giant bird of paradise",
-      "category": "Perennial Tree",
-      "soilType": "Well-drained rich organic",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.5
+      "botanicalName": "Strelitzia nicolai",
+      "category": "Perennial tree",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
       },
-      "sunExposure": "Full sun to part shade",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.5
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Well-drained, rich, organic"
+      },
+      "size": {
+        "heightM": 6,
+        "widthM": 3,
+        "spacingM": 3
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "moderate",
+        "frost": "tender",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Controlled-release fertiliser in spring.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Remove dead or badly torn leaves at the base; cut off spent flowers."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Tidier; spent flowers rot in the leaf bases."
+      },
+      "harvest": null,
+      "cautions": "Wind shreds the leaves (cosmetic). Frost-tender.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_gbop_prune_1",
           "type": "pruning",
-          "title": "Tidy foliage",
-          "description": "Remove dead or tattered leaves",
+          "title": "Remove torn and dead leaves",
+          "description": "Cut dead or badly wind-torn leaves off at the base; remove spent flowers.",
           "months": [
-            3,
-            4
-          ]
+            10,
+            11
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy; no harm.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "waratah",
       "name": "Waratah",
-      "category": "Native Shrub",
-      "soilType": "Sandy extremely well-drained",
-      "soilPh": {
-        "min": 5.5,
-        "max": 6.0
+      "botanicalName": "Telopea (species or hybrid to be confirmed)",
+      "category": "Native shrub",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 30,
+        "max": 75,
+        "note": "Morning sun, afternoon dappled shade"
       },
-      "sunExposure": "Morning sun dappled afternoon shade",
+      "soil": {
+        "ph": {
+          "min": 5.5,
+          "max": 6.0
+        },
+        "texture": "sandy",
+        "drainage": "sharp",
+        "note": "Sandy, very well drained; struggles in poorly drained clay"
+      },
+      "size": {
+        "heightM": 3,
+        "widthM": 2,
+        "spacingM": 1.5
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "low",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": true,
+      "feedingNote": "Rarely needed. If feeding, low-phosphorus controlled-release native fertiliser in early spring. Over-feeding is a common cause of failure.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "After flowering, cut flower stems back by half to three-quarters. Plants about 10 years old can be cut back to the swollen base (lignotuber) after flowering, half one year and half the next. Do not prune newly planted waratahs."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Part of the post-flowering prune."
+      },
+      "harvest": null,
+      "cautions": "Needs shelter from wind while flowering to avoid bract burn.",
+      "basis": {
+        "sources": [
+          "https://www.gardenclinic.com.au/how-to-grow-article/waratah"
+        ],
+        "confidence": "high"
+      },
       "tasks": [
         {
           "id": "task_war_prune_1",
           "type": "pruning",
-          "title": "Post-flower hard prune",
-          "description": "Prune hard after flowering to encourage bushy growth",
+          "title": "Prune after flowering",
+          "description": "Cut flower stems back by half to three-quarters. On plants about 10 years old, canes can instead be cut back to the swollen base, half the plant one year and half the next. Do not prune newly planted waratahs.",
           "months": [
             11,
-            12
-          ]
+            12,
+            1
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Half to three-quarters of each flower stem",
+          "materials": [],
+          "ifMissed": "Fewer, leggier flowering stems next year.",
+          "basis": {
+            "sources": [
+              "https://www.gardenclinic.com.au/how-to-grow-article/waratah"
+            ],
+            "confidence": "high"
+          }
         },
         {
           "id": "task_war_fert_1",
           "type": "fertilising",
-          "title": "Apply native fertiliser",
-          "description": "Apply low-phosphorus native fertiliser",
+          "title": "Native fertiliser (only if needed)",
+          "description": "Only if growth is poor: apply low-phosphorus controlled-release native fertiliser in early spring. Waratahs rarely need feeding.",
           "months": [
             9
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Less than the label rate",
+          "materials": [
+            "Low-phosphorus native fertiliser"
+          ],
+          "ifMissed": "Usually nothing; over-feeding does more harm.",
+          "basis": {
+            "sources": [
+              "https://www.gardenclinic.com.au/how-to-grow-article/waratah"
+            ],
+            "confidence": "high"
+          }
         }
       ]
     },
     {
       "id": "protea",
       "name": "Protea",
-      "category": "Evergreen Shrub",
-      "soilType": "Poor rocky well-drained",
-      "soilPh": {
-        "min": 5.5,
-        "max": 6.5
+      "botanicalName": "Protea spp. (several types; to be listed)",
+      "category": "Evergreen shrub",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 5.5,
+          "max": 6.5
+        },
+        "texture": "sandy",
+        "drainage": "sharp",
+        "note": "Poor, rocky, very well drained"
+      },
+      "size": {
+        "heightM": 1.5,
+        "widthM": 1.5,
+        "spacingM": 1.2
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": true,
+      "feedingNote": "Usually none. If needed, low-phosphorus native fertiliser.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Cut flowered stems back into the leafy part of the stem. Never cut into bare wood; it rarely reshoots."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Part of the post-flowering prune."
+      },
+      "harvest": null,
+      "cautions": "Phosphorus-sensitive: no general-purpose fertiliser or rich compost nearby.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_pro_prune_1",
           "type": "pruning",
-          "title": "Cut back stems",
-          "description": "Cut back flowered stems",
+          "title": "Prune after flowering",
+          "description": "Cut flowered stems back into the leafy part of the stem. Never cut into bare wood.",
           "months": [
-            10,
             11,
-            12
-          ]
+            12,
+            1
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Leave leaves on every stem",
+          "materials": [],
+          "ifMissed": "Plant becomes leggy and flowers less.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "native_hibiscus",
       "name": "Native hibiscus",
-      "category": "Native Shrub",
-      "soilType": "Well-drained sandy/loam",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.0
+      "botanicalName": "Alyogyne huegelii",
+      "category": "Native shrub",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "sandy",
+        "drainage": "good",
+        "note": "Well-drained sandy loam"
+      },
+      "size": {
+        "heightM": 2.5,
+        "widthM": 2,
+        "spacingM": 1.5
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Light feed of native fertiliser in spring.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Prune by up to about a third immediately after the main spring flowering."
+      },
+      "deadhead": {
+        "advice": "no",
+        "note": "Flowers fall on their own."
+      },
+      "harvest": null,
+      "cautions": "Often short-lived (several years).",
+      "basis": {
+        "sources": [
+          "https://www.burkesbackyard.com.au/blogs/expert-answers/dons-expert-answers-when-and-how-do-you-prune-a-native-hibiscus/"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_nhib_prune_1",
           "type": "pruning",
-          "title": "Tip prune",
-          "description": "Tip prune to maintain shape and density",
+          "title": "Prune after spring flowering",
+          "description": "Tip prune or cut back immediately after the main spring flowering to keep the plant dense.",
           "months": [
-            11,
             12,
             1
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Up to about one third",
+          "materials": [],
+          "ifMissed": "Leggy, sparse plant.",
+          "basis": {
+            "sources": [
+              "https://www.burkesbackyard.com.au/blogs/expert-answers/dons-expert-answers-when-and-how-do-you-prune-a-native-hibiscus/"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "lavender",
       "name": "Lavender",
-      "category": "Herb/Shrub",
-      "soilType": "Well-drained sandy",
-      "soilPh": {
-        "min": 6.5,
-        "max": 7.5
+      "botanicalName": "Lavandula angustifolia (English lavender)",
+      "category": "Herb/shrub",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.5,
+          "max": 7.5
+        },
+        "texture": "sandy",
+        "drainage": "sharp",
+        "note": "Well-drained sandy"
+      },
+      "size": {
+        "heightM": 0.6,
+        "widthM": 0.8,
+        "spacingM": 0.6
+      },
+      "tolerance": {
+        "wind": "high",
+        "salt": "high",
+        "frost": "hardy",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Rarely needed.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Cut back by about a third, staying within the leafy growth. Bare old wood rarely reshoots."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Trimming spent flower spikes keeps plants compact."
+      },
+      "harvest": null,
+      "cautions": null,
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_lav_prune_1",
           "type": "pruning",
-          "title": "Formative pruning",
-          "description": "Prune back by one-third to prevent woodiness",
+          "title": "Prune after flowering",
+          "description": "Cut back by about a third, staying within the leafy growth. Do not cut into bare old wood.",
           "months": [
-            3,
-            4
-          ]
+            2,
+            3
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "About one third",
+          "materials": [],
+          "ifMissed": "Plants become woody and open in the centre.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "pelargonium",
       "name": "Pelargonium",
+      "botanicalName": "Pelargonium spp.",
       "category": "Perennial",
-      "soilType": "Well-drained loam",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.0
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Well-drained loam"
+      },
+      "size": {
+        "heightM": 0.6,
+        "widthM": 0.6,
+        "spacingM": 0.5
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "high",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Light feed in spring.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "Cut back by a half to two-thirds, just above a leaf node; reshoots readily."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Encourages more flowers."
+      },
+      "harvest": null,
+      "cautions": null,
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_pel_prune_1",
           "type": "pruning",
-          "title": "Deadhead blooms",
-          "description": "Deadhead spent blooms",
+          "title": "Deadhead",
+          "description": "Snap or cut off spent flower heads.",
           "months": [
             11,
             12,
             1,
-            2
-          ]
+            2,
+            3,
+            4
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Fewer flowers.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         },
         {
           "id": "task_pel_prune_2",
           "type": "pruning",
           "title": "Rejuvenation prune",
-          "description": "Hard prune to rejuvenate",
+          "description": "Cut back to just above a leaf node.",
           "months": [
             8,
             9
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "A half to two-thirds",
+          "materials": [],
+          "ifMissed": "Leggy, woody plants.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "hydrangea",
       "name": "Hydrangea",
-      "category": "Deciduous Shrub",
-      "soilType": "Moist rich well-drained",
-      "soilPh": {
-        "min": 5.0,
-        "max": 7.0,
-        "note": "color dependent"
+      "botanicalName": "Hydrangea macrophylla (assumed)",
+      "category": "Deciduous shrub",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 25,
+        "max": 60,
+        "note": "Morning sun, afternoon shade"
       },
-      "sunExposure": "Morning sun afternoon shade",
+      "soil": {
+        "ph": {
+          "min": 5.0,
+          "max": 7.0,
+          "note": "colour depends on pH"
+        },
+        "texture": "loam",
+        "drainage": "moist",
+        "note": "Moist, rich, well drained"
+      },
+      "size": {
+        "heightM": 1.5,
+        "widthM": 1.5,
+        "spacingM": 1.2
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "moderate",
+        "frost": "hardy",
+        "waterlogging": "moderate",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Compost or general fertiliser in spring. Acid soil gives blue flowers, alkaline soil pink.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Cut stems that flowered back to the first pair of fat buds. Leave stems that did not flower; they carry next year's flowers."
+      },
+      "deadhead": {
+        "advice": "no",
+        "note": "Old heads can stay over winter and are removed at winter pruning."
+      },
+      "harvest": null,
+      "cautions": "Not irrigated: mulch in late spring to hold moisture between visits.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_hyd_prune_1",
           "type": "pruning",
-          "title": "Prune flowered stems",
-          "description": "Cut back old stems that have flowered",
+          "title": "Winter prune",
+          "description": "Cut stems that flowered back to the first pair of fat buds. Leave stems that did not flower this year.",
           "months": [
             7,
             8
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Flowered stems only",
+          "materials": [],
+          "ifMissed": "Fewer, smaller flowers; overcrowded shrub.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         },
         {
           "id": "task_hyd_water_1",
           "type": "watering",
-          "title": "Deep summer watering",
-          "description": "Deep watering to prevent wilting",
+          "title": "Deep water and mulch",
+          "description": "Water deeply during visits in dry weather. Mulch in late spring to hold moisture between visits.",
           "months": [
             12,
             1,
             2
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "A full bucket per plant per watering",
+          "materials": [
+            "Mulch"
+          ],
+          "ifMissed": "Wilting and leaf scorch; usually recovers after rain.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "daffodil",
       "name": "Daffodil",
+      "botanicalName": "Narcissus spp.",
       "category": "Bulb",
-      "soilType": "Well-drained",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.0
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
       },
-      "sunExposure": "Full sun to part shade",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Well drained"
+      },
+      "size": {
+        "heightM": 0.4,
+        "widthM": 0.1,
+        "spacingM": 0.12
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "hardy",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": false,
+      "phosphorusSensitive": false,
+      "feedingNote": "None needed; leaves left to die back feed the bulb.",
+      "pruning": {
+        "tolerance": null,
+        "rule": "Do not cut or tie green leaves. Remove them only once fully yellow."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Removing spent flowers stops seed-setting and sends energy to the bulb."
+      },
+      "harvest": null,
+      "cautions": "Bulbs are poisonous.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_daf_plant_1",
           "type": "planting",
-          "title": "Plant bulbs",
-          "description": "Plant bulbs for spring blooming",
+          "title": "Plant new bulbs (only if adding)",
+          "description": "Plant bulbs pointed end up, about twice as deep as the bulb is tall. Existing bulbs return each year and need no replanting.",
           "months": [
             3,
-            4,
-            5
-          ]
+            4
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "10–15 cm apart",
+          "materials": [
+            "Daffodil bulbs"
+          ],
+          "ifMissed": "Nothing; this is optional.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         },
         {
           "id": "task_daf_prune_1",
           "type": "pruning",
-          "title": "Allow foliage to die",
-          "description": "Let foliage die back naturally do not cut",
+          "title": "Remove spent foliage",
+          "description": "Once leaves are fully yellow (about six weeks after flowering), cut them off at ground level. Do not cut or tie green leaves.",
           "months": [
             11,
             12
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy only.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "arum_lily",
       "name": "Arum lily",
-      "category": "Bulb/Rhizome",
-      "soilType": "Moist boggy or well-drained",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.0
+      "botanicalName": "Zantedeschia aethiopica",
+      "category": "Rhizome",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
       },
-      "sunExposure": "Full sun to part shade",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "any",
+        "drainage": "wet-tolerant",
+        "note": "Moist or boggy; also tolerates drier soil"
+      },
+      "size": {
+        "heightM": 1,
+        "widthM": 0.6,
+        "spacingM": 0.6
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "hardy",
+        "waterlogging": "high",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "None needed.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Remove yellow leaves and spent flower stems at the base."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Removing flower heads before seeds form stops birds spreading it."
+      },
+      "harvest": null,
+      "cautions": "Environmental weed in coastal southern Victoria (declared in SA and WA, not in Victoria). Birds spread the seed. All parts poisonous.",
+      "basis": {
+        "sources": [
+          "https://weeds.org.au/profiles/arum-lily-calla/"
+        ],
+        "confidence": "high"
+      },
       "tasks": [
         {
           "id": "task_arum_prune_1",
           "type": "pruning",
           "title": "Tidy foliage",
-          "description": "Remove yellowing leaves and spent flower stems",
+          "description": "Remove yellowing leaves and spent flower stems at the base.",
           "months": [
             1,
             2
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy only.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "task_arum_prune_2",
+          "type": "pruning",
+          "title": "Remove flower heads before seeding",
+          "description": "Cut off flower heads as they fade, before the green seed heads form. Birds spread the seed into bushland.",
+          "months": [
+            10,
+            11,
+            12
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "All spent heads",
+          "materials": [],
+          "ifMissed": "Seedlings spread into nearby bushland and creek lines.",
+          "basis": {
+            "sources": [
+              "https://weeds.org.au/profiles/arum-lily-calla/"
+            ],
+            "confidence": "high"
+          }
         }
       ]
     },
     {
       "id": "canna_lily",
       "name": "Canna lily",
-      "category": "Rhizome/Perennial",
-      "soilType": "Rich moist",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.0
+      "botanicalName": "Canna spp.",
+      "category": "Rhizome",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "loam",
+        "drainage": "moist",
+        "note": "Rich, moist"
+      },
+      "size": {
+        "heightM": 1.5,
+        "widthM": 0.6,
+        "spacingM": 0.5
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "moderate",
+        "frost": "light",
+        "waterlogging": "high",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Compost or general fertiliser in spring.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "Cut stems to ground level once they die back in winter."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Encourages more flowers."
+      },
+      "harvest": null,
+      "cautions": null,
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_can_prune_1",
           "type": "pruning",
           "title": "Cut back",
-          "description": "Cut to the ground after foliage dies back",
+          "description": "Cut stems to the ground once the foliage has died back.",
           "months": [
             6,
             7
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "To ground level",
+          "materials": [],
+          "ifMissed": "Untidy; old stems can harbour pests.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "passionfruit",
       "name": "Passionfruit",
+      "botanicalName": "Passiflora edulis (grafted, assumed)",
       "category": "Climber",
-      "soilType": "Deep rich organic well-drained",
-      "soilPh": {
-        "min": 6.0,
-        "max": 6.5
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 6.5
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Deep, rich, organic, well drained"
+      },
+      "size": {
+        "heightM": 2,
+        "widthM": 4,
+        "spacingM": 3
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "low",
+        "frost": "tender",
+        "waterlogging": "low",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Citrus or fruit fertiliser (higher potassium) in spring and again in late summer.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Thin crowded, tangled growth by up to a third in spring. Avoid heavy cuts into old wood. Remove any shoots from below the graft."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": {
+        "signs": "Ripe when the fruit falls, or the skin is fully coloured and starting to wrinkle. Collect fallen fruit every visit.",
+        "storage": "About one week at room temperature; up to about two to three weeks in the fridge. Freeze the pulp for longer."
+      },
+      "cautions": "Frost-tender. On grafted vines, rootstock suckers can take over.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_pass_fert_1",
           "type": "fertilising",
-          "title": "Feed high potassium",
-          "description": "Apply high-potassium fertiliser",
+          "title": "Feed (higher potassium)",
+          "description": "Apply citrus or fruit fertiliser around the root zone (not against the stem) and water in. Spring and late summer.",
           "months": [
-            9,
             10,
-            11
-          ]
+            11,
+            2,
+            3
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "As per label",
+          "materials": [
+            "Citrus/fruit fertiliser"
+          ],
+          "ifMissed": "Smaller crop.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         },
         {
           "id": "task_pass_prune_1",
           "type": "pruning",
           "title": "Thin growth",
-          "description": "Thin out excessive growth to encourage airflow",
+          "description": "Thin out crowded and tangled growth to let in air and light. Avoid heavy cuts into old wood.",
           "months": [
-            8,
-            9
-          ]
+            9,
+            10
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Up to one third",
+          "materials": [],
+          "ifMissed": "Tangled vine; more disease, smaller crop.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "task_pass_prune_2",
+          "type": "pruning",
+          "title": "Remove rootstock suckers",
+          "description": "Look for shoots coming from below the graft (the bump near the base) or from the roots. Cut or pull them off where they start.",
+          "months": [
+            9,
+            10,
+            11,
+            12,
+            1,
+            2,
+            3
+          ],
+          "critical": true,
+          "criticalReason": "On grafted vines, suckers from the rootstock grow fast and can replace the fruiting variety.",
+          "howMuch": "All of them",
+          "materials": [],
+          "ifMissed": "The rootstock takes over; the vine may stop producing good fruit.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "bougainvillea",
       "name": "Bougainvillea",
-      "category": "Climber/Shrub",
-      "soilType": "Well-drained",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.0
+      "botanicalName": "Bougainvillea spp.",
+      "category": "Climber/shrub",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "any",
+        "drainage": "good",
+        "note": "Well drained"
+      },
+      "size": {
+        "heightM": 4,
+        "widthM": 4,
+        "spacingM": 3
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "high",
+        "frost": "tender",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Light feed in spring; too much nitrogen gives leaves instead of flowers.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "Can be cut back hard after flowering to control size; flowers form on new growth."
+      },
+      "deadhead": {
+        "advice": "no",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": "Thorny. Frost-tender; marginal in cool coastal Victoria.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_boug_prune_1",
           "type": "pruning",
-          "title": "Post-flower prune",
-          "description": "Prune vigorously after flowering to maintain size",
+          "title": "Prune after flowering",
+          "description": "Cut back to control size and shape; flowers form on new growth.",
           "months": [
             3,
             4
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Can be hard",
+          "materials": [],
+          "ifMissed": "Overgrown plant.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "birds_nest_fern",
-      "name": "Birds nest fern",
+      "name": "Bird's nest fern",
+      "botanicalName": "Asplenium australasicum",
       "category": "Fern",
-      "soilType": "Rich organic well-draining",
-      "soilPh": {
-        "min": 5.5,
-        "max": 6.5
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 10,
+        "max": 50,
+        "note": "Dappled to part shade"
       },
-      "sunExposure": "Dappled to part shade",
+      "soil": {
+        "ph": {
+          "min": 5.5,
+          "max": 6.5
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Rich, organic, free-draining"
+      },
+      "size": {
+        "heightM": 1,
+        "widthM": 1,
+        "spacingM": 1
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "low",
+        "frost": "tender",
+        "waterlogging": "low",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Dilute liquid fertiliser in the warm months.",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Remove only dead or damaged outer fronds."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": "Frost-tender. Not on the watering system.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_bnf_water_1",
           "type": "watering",
           "title": "Root watering",
-          "description": "Keep root ball moist avoid watering directly into the central nest",
+          "description": "Keep the root ball moist; do not water into the central nest (it can rot).",
           "months": [
             12,
             1,
             2
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Brown frond edges; stress.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "yucca",
       "name": "Yucca",
-      "category": "Succulent Tree",
-      "soilType": "Sandy extremely well-drained",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.5
+      "botanicalName": "Yucca elephantipes",
+      "category": "Succulent tree",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.5
+        },
+        "texture": "sandy",
+        "drainage": "sharp",
+        "note": "Sandy, very well drained"
+      },
+      "size": {
+        "heightM": 5,
+        "widthM": 2.5,
+        "spacingM": 2
+      },
+      "tolerance": {
+        "wind": "high",
+        "salt": "high",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": false,
+      "phosphorusSensitive": false,
+      "feedingNote": "Rarely needed.",
+      "pruning": {
+        "tolerance": "moderate",
+        "rule": "Remove dead lower leaves and spent flower spikes. Stems can be cut back to reduce height; they reshoot."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Remove the spent flower spike."
+      },
+      "harvest": null,
+      "cautions": "Sharp leaf tips.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_yuc_prune_1",
           "type": "pruning",
-          "title": "Remove old leaves",
-          "description": "Remove dead lower leaves",
+          "title": "Remove dead leaves",
+          "description": "Pull or cut off dead lower leaves; remove spent flower spikes.",
           "months": [
             3,
             4,
@@ -482,67 +1808,907 @@
             9,
             10,
             11
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy only.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "sunflower",
       "name": "Sunflower",
+      "botanicalName": "Helianthus annuus",
       "category": "Annual",
-      "soilType": "Deep well-drained loam",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.5
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.5
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Deep, well-drained loam"
+      },
+      "size": {
+        "heightM": 2,
+        "widthM": 0.5,
+        "spacingM": 0.45
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "moderate",
+        "frost": "tender",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Compost dug in before sowing.",
+      "pruning": {
+        "tolerance": null,
+        "rule": "Annual; no pruning. Thin seedlings to their final spacing early."
+      },
+      "deadhead": {
+        "advice": "no",
+        "note": "Leave heads to ripen seed, for harvest or birds."
+      },
+      "harvest": {
+        "signs": "Seed is ready when the back of the head turns yellow-brown and the petals have dropped. Cover heads with a paper bag or net to keep birds off.",
+        "storage": "Dried seed keeps for months in an airtight jar."
+      },
+      "cautions": "Tall plants may need staking in wind.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_sun_plant_1",
           "type": "planting",
           "title": "Sow seeds",
-          "description": "Sow seeds directly into garden bed",
+          "description": "Sow directly into the bed once the soil has warmed. Sowing at the start of the summer holidays allows watering while seedlings establish.",
           "months": [
-            9,
             10,
-            11
-          ]
+            11,
+            12
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "2–3 seeds per spot; spots at final spacing",
+          "materials": [
+            "Sunflower seed"
+          ],
+          "ifMissed": "No sunflowers this season.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "task_sun_thin_1",
+          "type": "pruning",
+          "title": "Thin seedlings",
+          "description": "When seedlings have two true leaves, keep the strongest at each spot and snip the rest at soil level (pulling disturbs roots).",
+          "months": [
+            11,
+            12,
+            1
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "One plant every 45 cm",
+          "materials": [],
+          "ifMissed": "Crowded, weak plants with small heads.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         },
         {
           "id": "task_sun_water_1",
           "type": "watering",
           "title": "Deep watering",
-          "description": "Deep regular watering as flower heads form",
+          "description": "Water deeply during visits as flower heads form; mulch to hold moisture.",
           "months": [
             12,
             1
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [
+            "Mulch"
+          ],
+          "ifMissed": "Smaller heads.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     },
     {
       "id": "kangaroo_paw",
       "name": "Kangaroo paw",
-      "category": "Native Perennial",
-      "soilType": "Sandy well-drained",
-      "soilPh": {
-        "min": 6.0,
-        "max": 7.0
+      "botanicalName": "Anigozanthos spp.",
+      "category": "Native perennial",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
       },
-      "sunExposure": "Full sun",
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "sandy",
+        "drainage": "sharp",
+        "note": "Sandy, well drained"
+      },
+      "size": {
+        "heightM": 1.2,
+        "widthM": 0.6,
+        "spacingM": 0.5
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Light feed of native fertiliser in spring.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "Cut flowered stems and old leaves down to the base after flowering."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Part of the post-flowering cut-back."
+      },
+      "harvest": null,
+      "cautions": "Prone to ink disease (black leaf marks) in humid conditions; remove affected leaves.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
       "tasks": [
         {
           "id": "task_kang_prune_1",
           "type": "pruning",
-          "title": "Hard prune",
-          "description": "Cut flowered stems and old leaves right down to the base",
+          "title": "Cut back after flowering",
+          "description": "Cut flowered stems and old leaves right down to the base.",
           "months": [
             1,
             2,
             3
-          ]
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "To the base",
+          "materials": [],
+          "ifMissed": "Untidy plant, fewer flowers, more ink disease.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "birch",
+      "name": "Birch",
+      "botanicalName": "Betula pendula (silver birch)",
+      "category": "Deciduous tree",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
+      },
+      "soil": {
+        "ph": {
+          "min": 5.0,
+          "max": 7.0
+        },
+        "texture": "loam",
+        "drainage": "moist",
+        "note": "Moist, well drained"
+      },
+      "size": {
+        "heightM": 12,
+        "widthM": 5,
+        "spacingM": null
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "low",
+        "frost": "hardy",
+        "waterlogging": "moderate",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Rarely needed; mulch the root zone.",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Avoid pruning if possible. Remove only dead, damaged or crossing branches, between late summer and mid-winter. From late winter the sap rises and cuts bleed heavily."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": "Shallow roots compete with nearby plants. Suffers in long dry spells.",
+      "basis": {
+        "sources": [
+          "https://www.rhs.org.uk/pruning/bleeding-from-cuts",
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "high"
+      },
+      "tasks": [
+        {
+          "id": "task_bir_prune_1",
+          "type": "pruning",
+          "title": "Remove dead or crossing branches (only if needed)",
+          "description": "Remove only dead, damaged or crossing branches. Do not prune from late winter to spring; cuts bleed sap heavily.",
+          "months": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "As little as possible",
+          "materials": [],
+          "ifMissed": "Nothing, if the tree is healthy.",
+          "basis": {
+            "sources": [
+              "https://www.rhs.org.uk/pruning/bleeding-from-cuts"
+            ],
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "task_bir_water_1",
+          "type": "watering",
+          "title": "Deep water in dry spells",
+          "description": "Water deeply during visits in dry weather, especially young trees. Mulch the root zone.",
+          "months": [
+            12,
+            1,
+            2
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [
+            "Mulch"
+          ],
+          "ifMissed": "Leaf drop and dieback in long dry spells.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "grapevine",
+      "name": "Grapevine",
+      "botanicalName": "Vitis vinifera (table grape; variety to be confirmed)",
+      "category": "Climber (deciduous)",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 75,
+        "max": 100,
+        "note": "Full sun"
+      },
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "loam",
+        "drainage": "good",
+        "note": "Well drained"
+      },
+      "size": {
+        "heightM": 2,
+        "widthM": 4,
+        "spacingM": 2.5
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "low",
+        "frost": "hardy",
+        "waterlogging": "low",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Light feed of compost or complete fertiliser in spring; too much nitrogen gives leaves instead of fruit.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "Winter: remove up to about 90% of last season's growth. Spur pruning cuts each cane back to two buds."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": {
+        "signs": "Ripe when bunches are fully coloured, the berries taste sweet and the seeds are brown. Grapes do not ripen further once picked.",
+        "storage": "About one to two weeks in the fridge, unwashed."
+      },
+      "cautions": "Birds take ripening fruit: net from when berries start to colour. Mildew risk in humid coastal weather; keep the canopy open.",
+      "basis": {
+        "sources": [
+          "https://sybilsfruits.blogspot.com/2020/01/how-to-prune-grapevines-in-australia.html",
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
+      "tasks": [
+        {
+          "id": "task_gra_prune_1",
+          "type": "pruning",
+          "title": "Winter prune",
+          "description": "Spur pruning: cut each of last season's canes back to a spur of two buds. Cut a few millimetres above a bud.",
+          "months": [
+            7,
+            8
+          ],
+          "critical": true,
+          "criticalReason": "Grapes fruit on new shoots from last year's wood; without winter pruning the vine tangles and crops poorly for the season.",
+          "howMuch": "Up to about 90% of last season's growth",
+          "materials": [],
+          "ifMissed": "A season's crop is reduced, and the vine becomes harder to manage.",
+          "basis": {
+            "sources": [
+              "https://sybilsfruits.blogspot.com/2020/01/how-to-prune-grapevines-in-australia.html"
+            ],
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "task_gra_prune_2",
+          "type": "pruning",
+          "title": "Summer trim and thin",
+          "description": "Shorten long shoots a few leaves past the last bunch; remove some leaves around bunches to let in air and light.",
+          "months": [
+            12,
+            1
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "More mildew, slower ripening.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "task_gra_fert_1",
+          "type": "fertilising",
+          "title": "Spring feed",
+          "description": "Spread compost or a light application of complete fertiliser around the root zone.",
+          "months": [
+            9,
+            10
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Light",
+          "materials": [
+            "Compost"
+          ],
+          "ifMissed": "Weaker growth.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "agave",
+      "name": "Agave",
+      "botanicalName": "Agave attenuata (foxtail agave)",
+      "category": "Succulent",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
+      },
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.5
+        },
+        "texture": "sandy",
+        "drainage": "sharp",
+        "note": "Very well drained"
+      },
+      "size": {
+        "heightM": 1,
+        "widthM": 1.5,
+        "spacingM": 1.2
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": false,
+      "phosphorusSensitive": false,
+      "feedingNote": "Not needed.",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Remove only dead or damaged leaves at the base; cut green leaves scar permanently."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": "Flowers once and then dies; offsets (pups) replace it. Mild frosts only. Spineless.",
+      "basis": {
+        "sources": [
+          "https://www.nurseriesonline.com.au/plant-index/succulents/agave-attenuata/"
+        ],
+        "confidence": "medium"
+      },
+      "tasks": [
+        {
+          "id": "task_aga_prune_1",
+          "type": "pruning",
+          "title": "Remove dead leaves and unwanted pups",
+          "description": "Cut off dead lower leaves at the base. Remove offsets (pups) if the clump is spreading too far; they can be replanted.",
+          "months": [
+            10,
+            11,
+            12
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy; clump spreads.",
+          "basis": {
+            "sources": [
+              "https://www.nurseriesonline.com.au/plant-index/succulents/agave-attenuata/"
+            ],
+            "confidence": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "baby_tears",
+      "name": "Baby's tears",
+      "botanicalName": "Soleirolia soleirolii",
+      "category": "Groundcover",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 0,
+        "max": 40,
+        "note": "Shade; protect from hot sun"
+      },
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "loam",
+        "drainage": "moist",
+        "note": "Moist soil"
+      },
+      "size": {
+        "heightM": 0.05,
+        "widthM": 1,
+        "spacingM": 0.3
+      },
+      "tolerance": {
+        "wind": "low",
+        "salt": "low",
+        "frost": "tender",
+        "waterlogging": "high",
+        "drySpells": "low"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Not needed.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "Trim freely to contain; regrows quickly."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": "Frost-sensitive; may die back in cold winters. Spreads readily into lawns and paths.",
+      "basis": {
+        "sources": [
+          "https://www.burkesbackyard.com.au/fact-sheets/in-the-garden/grasses-ground-covers-lawns/babys-tears/",
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
+      "tasks": [
+        {
+          "id": "task_bt_water_1",
+          "type": "watering",
+          "title": "Water in dry spells",
+          "description": "Water during visits in dry weather. It may brown off between visits and usually regrows.",
+          "months": [
+            12,
+            1,
+            2,
+            3
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Patches die back.",
+          "basis": {
+            "sources": [
+              "https://www.burkesbackyard.com.au/fact-sheets/in-the-garden/grasses-ground-covers-lawns/babys-tears/"
+            ],
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "task_bt_prune_1",
+          "type": "pruning",
+          "title": "Trim edges",
+          "description": "Trim the edges to stop it spreading into lawns and paths.",
+          "months": [
+            10,
+            11,
+            12,
+            1,
+            2,
+            3
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Spreads into lawn and paths.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aloe",
+      "name": "Aloe",
+      "botanicalName": "Aloe arborescens",
+      "category": "Succulent",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
+      },
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.5
+        },
+        "texture": "sandy",
+        "drainage": "sharp",
+        "note": "Very well drained"
+      },
+      "size": {
+        "heightM": 2,
+        "widthM": 2,
+        "spacingM": 1.5
+      },
+      "tolerance": {
+        "wind": "high",
+        "salt": "high",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": false,
+      "phosphorusSensitive": false,
+      "feedingNote": "Not needed.",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Remove spent flower stalks and dead lower leaves."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Cut spent flower stalks at the base."
+      },
+      "harvest": null,
+      "cautions": "Can spread into bushland in some coastal areas.",
+      "basis": {
+        "sources": [
+          "Claude: general horticultural knowledge (not yet checked against a published source)"
+        ],
+        "confidence": "medium"
+      },
+      "tasks": [
+        {
+          "id": "task_alo_prune_1",
+          "type": "pruning",
+          "title": "Remove spent flower stalks",
+          "description": "Cut spent flower stalks at the base after winter flowering; remove dead lower leaves.",
+          "months": [
+            9,
+            10
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy only.",
+          "basis": {
+            "sources": [
+              "Claude: general horticultural knowledge (not yet checked against a published source)"
+            ],
+            "confidence": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cycad",
+      "name": "Cycad",
+      "botanicalName": "Cycas revoluta",
+      "category": "Cycad",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to part shade"
+      },
+      "soil": {
+        "ph": {
+          "min": 6.0,
+          "max": 7.0
+        },
+        "texture": "loam",
+        "drainage": "sharp",
+        "note": "Well drained"
+      },
+      "size": {
+        "heightM": 2,
+        "widthM": 2,
+        "spacingM": 1.5
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "moderate",
+        "frost": "light",
+        "waterlogging": "low",
+        "drySpells": "high"
+      },
+      "needsEstablishmentWatering": false,
+      "phosphorusSensitive": false,
+      "feedingNote": "Controlled-release fertiliser in spring; in coastal or alkaline soil add trace elements (iron, manganese, zinc).",
+      "pruning": {
+        "tolerance": "light",
+        "rule": "Remove only brown or fully yellow fronds, close to the trunk; green fronds feed the plant."
+      },
+      "deadhead": {
+        "advice": "n/a",
+        "note": null
+      },
+      "harvest": null,
+      "cautions": "All parts poisonous, especially the seeds; keep away from pets and children. Sharp leaf tips.",
+      "basis": {
+        "sources": [
+          "https://www.bunnings.com.au/diy-advice/garden/planting-and-growing/how-to-grow-and-care-for-a-cycad"
+        ],
+        "confidence": "high"
+      },
+      "tasks": [
+        {
+          "id": "task_cyc_prune_1",
+          "type": "pruning",
+          "title": "Remove dead fronds",
+          "description": "Cut brown or fully yellow fronds off close to the trunk with secateurs or long-handled loppers. Leave green fronds.",
+          "months": [
+            9,
+            10
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "Dead fronds only",
+          "materials": [],
+          "ifMissed": "Untidy only.",
+          "basis": {
+            "sources": [
+              "https://www.bunnings.com.au/diy-advice/garden/planting-and-growing/how-to-grow-and-care-for-a-cycad"
+            ],
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "task_cyc_fert_1",
+          "type": "fertilising",
+          "title": "Spring feed",
+          "description": "Apply controlled-release fertiliser for trees and shrubs. In coastal or alkaline soil, add trace elements (iron, manganese, zinc).",
+          "months": [
+            9,
+            10,
+            11
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": "As per label",
+          "materials": [
+            "Controlled-release fertiliser",
+            "trace elements"
+          ],
+          "ifMissed": "Yellowing new fronds.",
+          "basis": {
+            "sources": [
+              "https://www.bunnings.com.au/diy-advice/garden/planting-and-growing/how-to-grow-and-care-for-a-cycad"
+            ],
+            "confidence": "high"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cordyline",
+      "name": "Cabbage tree (red)",
+      "botanicalName": "Cordyline australis (red-leaved form)",
+      "category": "Tree/shrub",
+      "zone": null,
+      "irrigated": false,
+      "sun": {
+        "min": 50,
+        "max": 100,
+        "note": "Full sun to light shade; light shade keeps red leaf colour richer"
+      },
+      "soil": {
+        "ph": {
+          "min": 5.5,
+          "max": 7.5
+        },
+        "texture": "any",
+        "drainage": "good",
+        "note": "Fertile, well drained"
+      },
+      "size": {
+        "heightM": 4,
+        "widthM": 1.5,
+        "spacingM": 1.5
+      },
+      "tolerance": {
+        "wind": "moderate",
+        "salt": "high",
+        "frost": "light",
+        "waterlogging": "moderate",
+        "drySpells": "moderate"
+      },
+      "needsEstablishmentWatering": true,
+      "phosphorusSensitive": false,
+      "feedingNote": "Light feed in spring if growth is slow.",
+      "pruning": {
+        "tolerance": "hard",
+        "rule": "Remove old lower leaves as they die. In spring, cut out winter-damaged growth just above a side shoot or at a sound point on the trunk. An overgrown plant can be cut through the main stem in mid-spring; it resprouts."
+      },
+      "deadhead": {
+        "advice": "yes",
+        "note": "Faded flower spikes can be removed, or left to produce berries."
+      },
+      "harvest": null,
+      "cautions": "Coloured-leaf forms are less hardy than green ones. Tying the leaves together reduces wind damage. Tough leaf fibres can jam mowers and are slow to compost.",
+      "basis": {
+        "sources": [
+          "https://www.rhs.org.uk/plants/popular/cordyline/growing-guide"
+        ],
+        "confidence": "high"
+      },
+      "tasks": [
+        {
+          "id": "task_cor_prune_1",
+          "type": "pruning",
+          "title": "Remove dead lower leaves",
+          "description": "Pull or cut off dead and dying lower leaves. Cut out any winter-damaged growth just above a side shoot or at a sound point on the trunk.",
+          "months": [
+            10,
+            11
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Untidy; damaged growth can rot.",
+          "basis": {
+            "sources": [
+              "https://www.rhs.org.uk/plants/popular/cordyline/growing-guide"
+            ],
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "task_cor_prune_2",
+          "type": "pruning",
+          "title": "Remove faded flower spikes (optional)",
+          "description": "Cut faded flower spikes off at their base, or leave them for the berries.",
+          "months": [
+            1,
+            2
+          ],
+          "critical": false,
+          "criticalReason": null,
+          "howMuch": null,
+          "materials": [],
+          "ifMissed": "Nothing; optional.",
+          "basis": {
+            "sources": [
+              "https://www.rhs.org.uk/plants/popular/cordyline/growing-guide"
+            ],
+            "confidence": "medium"
+          }
         }
       ]
     }
-  ]
+  ],
+  "wishlist": []
 }

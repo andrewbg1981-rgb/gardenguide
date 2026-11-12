@@ -10,7 +10,7 @@ planting) from a small plant database, and keeps a log of what was done or skipp
 ## Layout
 
 ```
-data/source/   the spreadsheet you edit
+data/source/   the plant database spreadsheet you edit (GardenGuide plant database.xlsx)
 data/          plants.json, generated from the spreadsheet
 scripts/       convert and validate the data
 src/core/      the schedule engine (pure logic) and its tests

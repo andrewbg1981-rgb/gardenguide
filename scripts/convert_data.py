@@ -1,7 +1,8 @@
-"""Convert the GardenGuide spreadsheet into data/plants.json.
+"""Convert the GardenGuide plant database spreadsheet into data/plants.json.
 
-The spreadsheet has one row per task, repeating the plant's details on each
-row. The JSON lists each plant once, with its tasks nested underneath (D-01).
+The spreadsheet has separate tabs for Plants, Tasks, Zones and Wishlist.
+Columns are found by their header names, so they can be reordered or widened
+freely. Every problem is reported with its tab and row, not just the first.
 
 Usage:  python3 scripts/convert_data.py
 Needs:  Python 3 and openpyxl  (pip install openpyxl)
@@ -15,95 +16,288 @@ from pathlib import Path
 import openpyxl
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "data" / "source" / "GardenGuide v1 data set.xlsx"
+SOURCE = ROOT / "data" / "source" / "GardenGuide plant database.xlsx"
 OUTPUT = ROOT / "data" / "plants.json"
-SHEET = "2. DB schema"
+SCHEMA_VERSION = 2
 
-EXPECTED_HEADERS = [
-    "Plant ID", "Plant Name", "Category", "Soil Type", "Soil pH", "Sun Exposure",
-    "Task ID", "Task Type", "Task Title", "Task Description", "Months",
-]
+TASK_TYPES = {"pruning", "fertilising", "watering", "planting"}
+LEVEL = {"low", "moderate", "high"}
+FROST = {"tender", "light", "hardy"}
+PRUNING = {"light", "moderate", "hard"}
+TEXTURE = {"sandy", "loam", "clay", "any", "potting mix", "epiphytic"}
+DRAINAGE = {"sharp", "good", "moist", "wet-tolerant"}
+CONFIDENCE = {"high", "medium", "low"}
+EXPOSURE = {"sheltered", "moderate", "exposed"}
 
-PLANT_FIELDS = ["name", "category", "soilType", "soilPh", "sunExposure"]
+
+class Problems(list):
+    """Collects every problem found, so the user sees them all at once."""
 
 
-def parse_ph(text: str) -> dict:
-    """'5.0-7.0 (color dependent)' -> {'min': 5.0, 'max': 7.0, 'note': 'color dependent'}"""
-    m = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*(?:\((.*)\))?\s*", text)
+def text(v):
+    if v is None:
+        return None
+    s = str(v).strip()
+    return s or None
+
+
+def number(v, where, field, problems):
+    if v is None or str(v).strip() == "":
+        return None
+    try:
+        return float(v) if not float(v).is_integer() else int(float(v))
+    except (TypeError, ValueError):
+        problems.append(f"{where}: {field} must be a number (found {v!r})")
+        return None
+
+
+def choice(v, allowed, where, field, problems, required=False):
+    s = text(v)
+    if s is None:
+        if required:
+            problems.append(f"{where}: {field} is required")
+        return None
+    s = s.lower()
+    if s not in allowed:
+        problems.append(f"{where}: {field} '{s}' is not one of {', '.join(sorted(allowed))}")
+        return None
+    return s
+
+
+def yes_no(v, where, field, problems, required=False):
+    s = choice(v, {"yes", "no"}, where, field, problems, required)
+    return None if s is None else s == "yes"
+
+
+def parse_ph(v, where, problems):
+    """'5.0-7.0 (colour depends on pH)' -> {'min': 5.0, 'max': 7.0, 'note': '...'}"""
+    s = text(v)
+    if s is None:
+        return None
+    m = re.fullmatch(r"(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*(?:\((.*)\))?", s)
     if not m:
-        raise ValueError(f"cannot read soil pH {text!r} (expected e.g. '5.5-6.5')")
+        problems.append(f"{where}: cannot read soil pH {s!r} (expected e.g. '5.5-6.5')")
+        return None
     ph = {"min": float(m.group(1)), "max": float(m.group(2))}
     if m.group(3):
         ph["note"] = m.group(3).strip()
     return ph
 
 
-def parse_months(value) -> list[int]:
+def parse_months(v, where, problems):
     """'9, 10, 11' -> [9, 10, 11]  (kept in spreadsheet order)"""
-    parts = [p.strip() for p in str(value).split(",") if p.strip()]
-    months = [int(float(p)) for p in parts]
+    try:
+        months = [int(float(p)) for p in str(v).split(",") if p.strip()]
+    except ValueError:
+        problems.append(f"{where}: cannot read months {v!r} (expected e.g. '11, 12, 1')")
+        return []
+    if not months:
+        problems.append(f"{where}: months are required")
     bad = [m for m in months if not 1 <= m <= 12]
     if bad:
-        raise ValueError(f"months out of range 1-12: {bad}")
+        problems.append(f"{where}: months out of range 1-12: {bad}")
     return months
 
 
+def sources(v):
+    return [s.strip() for s in str(v or "").split(";") if s.strip()]
+
+
+def read_tab(wb, name, required_headers, problems):
+    """Rows of a tab as dicts keyed by header, with their spreadsheet row numbers."""
+    if name not in wb.sheetnames:
+        problems.append(f"Tab '{name}' is missing")
+        return []
+    ws = wb[name]
+    rows = list(ws.iter_rows(values_only=True))
+    headers = [text(h) or "" for h in rows[0]]
+    missing = [h for h in required_headers if h not in headers]
+    if missing:
+        problems.append(f"Tab '{name}': missing column(s) {missing}")
+        return []
+    out = []
+    for i, r in enumerate(rows[1:], start=2):
+        if all(c is None or str(c).strip() == "" for c in r):
+            continue
+        out.append((i, dict(zip(headers, r))))
+    return out
+
+
+PLANT_HEADERS = [
+    "Plant ID", "Plant name", "Botanical name", "Category", "Zone", "Irrigated",
+    "Sun min %", "Sun max %", "Sun note", "Soil pH", "Soil texture", "Drainage", "Soil note",
+    "Height (m)", "Width (m)", "Spacing (m)", "Wind tolerance", "Salt tolerance", "Frost tolerance",
+    "Waterlogging tolerance", "Dry-spell tolerance", "Needs watering to establish",
+    "Phosphorus sensitive", "Feeding note", "Pruning tolerance", "Pruning rule", "Deadhead", "Deadhead note",
+    "Harvest signs", "Storage", "Cautions", "Sources", "Confidence",
+]
+TASK_HEADERS = [
+    "Plant ID", "Task ID", "Task type", "Task title", "Months", "Critical", "Critical reason",
+    "How", "How much", "Materials", "If missed", "Sources", "Confidence",
+]
+ZONE_HEADERS = [
+    "Zone ID", "Zone name", "Theme", "Container", "Sun min %", "Sun max %", "Sun note",
+    "Wind exposure", "Wind confirmed", "Salt exposure", "Salt confirmed",
+    "Soil pH (measured)", "Soil texture", "Drainage", "Soil surveyed on", "Notes",
+]
+WISH_HEADERS = ["Plant name", "Botanical name", "Intended zone", "Notes"]
+
+
+def basis(c, where, problems):
+    src = sources(c["Sources"])
+    if not src:
+        problems.append(f"{where}: Sources is required (KB-05)")
+    return {"sources": src, "confidence": choice(c["Confidence"], CONFIDENCE, where, "Confidence", problems, True)}
+
+
+def convert_zone(row, c, problems):
+    w = f"Zones row {row}"
+    zone_id = text(c["Zone ID"])
+    if not zone_id:
+        problems.append(f"{w}: Zone ID is required")
+    surveyed = c["Soil surveyed on"]
+    return {
+        "id": zone_id,
+        "name": text(c["Zone name"]),
+        "theme": text(c["Theme"]),
+        "container": yes_no(c["Container"], w, "Container", problems, True),
+        "sun": {"min": number(c["Sun min %"], w, "Sun min %", problems),
+                "max": number(c["Sun max %"], w, "Sun max %", problems), "note": text(c["Sun note"])},
+        "wind": {"level": choice(c["Wind exposure"], EXPOSURE, w, "Wind exposure", problems),
+                 "confirmed": bool(yes_no(c["Wind confirmed"], w, "Wind confirmed", problems))},
+        "salt": {"level": choice(c["Salt exposure"], LEVEL, w, "Salt exposure", problems),
+                 "confirmed": bool(yes_no(c["Salt confirmed"], w, "Salt confirmed", problems))},
+        "soil": {"ph": number(c["Soil pH (measured)"], w, "Soil pH", problems),
+                 "texture": choice(c["Soil texture"], TEXTURE, w, "Soil texture", problems),
+                 "drainage": choice(c["Drainage"], DRAINAGE, w, "Drainage", problems),
+                 "surveyedOn": surveyed.strftime("%Y-%m-%d") if hasattr(surveyed, "strftime") else text(surveyed)},
+        "notes": text(c["Notes"]),
+    }
+
+
+def convert_plant(row, c, problems):
+    w = f"Plants row {row}"
+    plant_id = text(c["Plant ID"])
+    if not plant_id:
+        problems.append(f"{w}: Plant ID is required")
+    for f in ["Plant name", "Category"]:
+        if not text(c[f]):
+            problems.append(f"{w}: {f} is required")
+    harvest = None
+    if text(c["Harvest signs"]) or text(c["Storage"]):
+        harvest = {"signs": text(c["Harvest signs"]), "storage": text(c["Storage"])}
+    return {
+        "id": plant_id,
+        "name": text(c["Plant name"]),
+        "botanicalName": text(c["Botanical name"]),
+        "category": text(c["Category"]),
+        "zone": text(c["Zone"]),
+        "irrigated": bool(yes_no(c["Irrigated"], w, "Irrigated", problems)),
+        "sun": {"min": number(c["Sun min %"], w, "Sun min %", problems),
+                "max": number(c["Sun max %"], w, "Sun max %", problems), "note": text(c["Sun note"])},
+        "soil": {"ph": parse_ph(c["Soil pH"], w, problems),
+                 "texture": choice(c["Soil texture"], TEXTURE, w, "Soil texture", problems),
+                 "drainage": choice(c["Drainage"], DRAINAGE, w, "Drainage", problems),
+                 "note": text(c["Soil note"])},
+        "size": {"heightM": number(c["Height (m)"], w, "Height", problems),
+                 "widthM": number(c["Width (m)"], w, "Width", problems),
+                 "spacingM": number(c["Spacing (m)"], w, "Spacing", problems)},
+        "tolerance": {
+            "wind": choice(c["Wind tolerance"], LEVEL, w, "Wind tolerance", problems),
+            "salt": choice(c["Salt tolerance"], LEVEL, w, "Salt tolerance", problems),
+            "frost": choice(c["Frost tolerance"], FROST, w, "Frost tolerance", problems),
+            "waterlogging": choice(c["Waterlogging tolerance"], LEVEL, w, "Waterlogging tolerance", problems),
+            "drySpells": choice(c["Dry-spell tolerance"], LEVEL, w, "Dry-spell tolerance", problems),
+        },
+        "needsEstablishmentWatering": yes_no(c["Needs watering to establish"], w, "Needs watering to establish", problems),
+        "phosphorusSensitive": yes_no(c["Phosphorus sensitive"], w, "Phosphorus sensitive", problems),
+        "feedingNote": text(c["Feeding note"]),
+        "pruning": {"tolerance": choice(c["Pruning tolerance"], PRUNING, w, "Pruning tolerance", problems),
+                    "rule": text(c["Pruning rule"])},
+        "deadhead": {"advice": choice(c["Deadhead"], {"yes", "no", "n/a"}, w, "Deadhead", problems),
+                     "note": text(c["Deadhead note"])},
+        "harvest": harvest,
+        "cautions": text(c["Cautions"]),
+        "basis": basis(c, w, problems),
+        "tasks": [],
+    }
+
+
+def convert_task(row, c, problems):
+    w = f"Tasks row {row}"
+    for f in ["Task ID", "Task title", "How"]:
+        if not text(c[f]):
+            problems.append(f"{w}: {f} is required")
+    critical = yes_no(c["Critical"], w, "Critical", problems, True)
+    if critical and not text(c["Critical reason"]):
+        problems.append(f"{w}: a critical task needs a 'Critical reason' (KB-04)")
+    return {
+        "id": text(c["Task ID"]),
+        "type": choice(c["Task type"], TASK_TYPES, w, "Task type", problems, True),
+        "title": text(c["Task title"]),
+        "description": text(c["How"]),
+        "months": parse_months(c["Months"], w, problems),
+        "critical": bool(critical),
+        "criticalReason": text(c["Critical reason"]),
+        "howMuch": text(c["How much"]),
+        "materials": [m.strip() for m in str(c["Materials"] or "").split(";") if m.strip()],
+        "ifMissed": text(c["If missed"]),
+        "basis": basis(c, w, problems),
+    }
+
+
 def main() -> int:
+    problems = Problems()
     wb = openpyxl.load_workbook(SOURCE, data_only=True)
-    ws = wb[SHEET]
-    rows = [r for r in ws.iter_rows(values_only=True) if any(c is not None for c in r)]
-    headers = [str(h).strip() if h is not None else "" for h in rows[0]]
-    if headers[: len(EXPECTED_HEADERS)] != EXPECTED_HEADERS:
-        print(f"Unexpected column headers in '{SHEET}':\n  {headers}", file=sys.stderr)
-        return 1
+
+    zones = [convert_zone(r, c, problems) for r, c in read_tab(wb, "Zones", ZONE_HEADERS, problems)]
+    zone_ids = {z["id"] for z in zones}
 
     plants: dict[str, dict] = {}
-    errors: list[str] = []
-    for line_no, row in enumerate(rows[1:], start=2):
-        cell = dict(zip(EXPECTED_HEADERS, row))
-        where = f"row {line_no}"
-        try:
-            plant_id = str(cell["Plant ID"]).strip()
-            plant = {
-                "id": plant_id,
-                "name": str(cell["Plant Name"]).strip(),
-                "category": str(cell["Category"]).strip(),
-                "soilType": str(cell["Soil Type"]).strip(),
-                "soilPh": parse_ph(str(cell["Soil pH"])),
-                "sunExposure": str(cell["Sun Exposure"]).strip(),
-                "tasks": [],
-            }
-            task = {
-                "id": str(cell["Task ID"]).strip(),
-                "type": str(cell["Task Type"]).strip().lower(),
-                "title": str(cell["Task Title"]).strip(),
-                "description": str(cell["Task Description"]).strip(),
-                "months": parse_months(cell["Months"]),
-            }
-        except Exception as exc:  # report every bad row, not just the first
-            errors.append(f"{where}: {exc}")
+    for r, c in read_tab(wb, "Plants", PLANT_HEADERS, problems):
+        p = convert_plant(r, c, problems)
+        if p["id"] in plants:
+            problems.append(f"Plants row {r}: duplicate Plant ID '{p['id']}'")
+        elif p["zone"] and p["zone"] not in zone_ids:
+            problems.append(f"Plants row {r}: zone '{p['zone']}' is not in the Zones tab")
+        plants[p["id"]] = p
+
+    for r, c in read_tab(wb, "Tasks", TASK_HEADERS, problems):
+        t = convert_task(r, c, problems)
+        pid = text(c["Plant ID"])
+        if pid not in plants:
+            problems.append(f"Tasks row {r}: Plant ID '{pid}' is not in the Plants tab")
             continue
+        plants[pid]["tasks"].append(t)
 
-        existing = plants.setdefault(plant_id, plant)
-        # The same plant appears on several rows; its details must agree.
-        for field in PLANT_FIELDS:
-            if existing[field] != plant[field]:
-                errors.append(f"{where}: plant '{plant_id}' has a different {field} than on an earlier row")
-        existing["tasks"].append(task)
+    wishlist = []
+    for r, c in read_tab(wb, "Wishlist", WISH_HEADERS, problems):
+        zone = text(c["Intended zone"])
+        if zone and zone not in zone_ids:
+            problems.append(f"Wishlist row {r}: zone '{zone}' is not in the Zones tab")
+        wishlist.append({"name": text(c["Plant name"]), "botanicalName": text(c["Botanical name"]),
+                         "zone": zone, "notes": text(c["Notes"])})
 
-    if errors:
-        print("Spreadsheet problems:\n  " + "\n  ".join(errors), file=sys.stderr)
+    for p in plants.values():
+        if not p["tasks"]:
+            problems.append(f"Plant '{p['id']}' has no tasks in the Tasks tab")
+
+    if problems:
+        print("Spreadsheet problems:\n  " + "\n  ".join(problems), file=sys.stderr)
         return 1
 
     library = {
-        "schemaVersion": 1,
+        "schemaVersion": SCHEMA_VERSION,
         "hemisphere": "south",
+        "location": "Skenes Creek, Victoria",
         "source": SOURCE.name,
+        "zones": zones,
         "plants": list(plants.values()),
+        "wishlist": wishlist,
     }
     OUTPUT.write_text(json.dumps(library, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     n_tasks = sum(len(p["tasks"]) for p in library["plants"])
-    print(f"Wrote {OUTPUT.relative_to(ROOT)}: {len(plants)} plants, {n_tasks} tasks")
+    print(f"Wrote {OUTPUT.relative_to(ROOT)}: {len(plants)} plants, {n_tasks} tasks, {len(zones)} zones, {len(wishlist)} wishlist")
     return 0
 
 

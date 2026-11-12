@@ -243,25 +243,44 @@ test('TD-01: with the real database on 11 Nov 2026, the list matches a hand chec
   const lib = realLibrary();
   const active = activeTasks(lib, createInitialState(lib, d(2026, 11, 11)), d(2026, 11, 11));
   const got = active.map((t) => `${t.task.id} ${t.key.split('|')[2]}`);
-  // Hand check against the spreadsheet: tasks with any month in Oct 2026 – Jan 2027,
-  // ordered by window start, then window end, then plant name.
+  // Hand check: computed separately in Python straight from the spreadsheet (Nov 2026
+  // database): windows overlapping Oct 2026 – Jan 2027, ordered by window start,
+  // then window end, then plant name, then task title.
   assert.deepEqual(got, [
-    'task_pass_fert_1 2026-09', // Sep–Nov, Passionfruit
-    'task_stag_fert_1 2026-09', // Sep–Nov, Staghorn fern
-    'task_sun_plant_1 2026-09', // Sep–Nov, Sunflower
-    'task_yuc_prune_1 2026-09', // Sep–Nov, Yucca (spring window)
-    'task_elk_fert_1 2026-09',  // Sep–Feb (same start, ends later)
-    'task_pro_prune_1 2026-10', // Oct–Dec
+    'task_alo_prune_1 2026-09', // Sep–Oct, Aloe
+    'task_cyc_prune_1 2026-09', // Sep–Oct, Cycad
+    'task_gra_fert_1 2026-09', // Sep–Oct, Grapevine
+    'task_pass_prune_1 2026-09', // Sep–Oct, Passionfruit
+    'task_bop_fert_1 2026-09', // Sep–Nov, Bird of paradise
+    'task_cyc_fert_1 2026-09', // Sep–Nov, Cycad
+    'task_yuc_prune_1 2026-09', // Sep–Nov, Yucca
+    'task_pass_prune_2 2026-09', // Sep–Mar, Passionfruit
+    'task_cor_prune_1 2026-10', // Oct–Nov, Cabbage tree (red)
+    'task_gbop_prune_1 2026-10', // Oct–Nov, Giant bird of paradise
+    'task_pass_fert_1 2026-10', // Oct–Nov, Passionfruit
+    'task_aga_prune_1 2026-10', // Oct–Dec, Agave
+    'task_arum_prune_2 2026-10', // Oct–Dec, Arum lily
+    'task_sun_plant_1 2026-10', // Oct–Dec, Sunflower
+    'task_stag_fert_1 2026-10', // Oct–Jan, Staghorn fern
+    'task_bt_prune_1 2026-10', // Oct–Mar, Baby's tears
+    'task_elk_fert_1 2026-10', // Oct–Mar, Elkhorn fern
+    'task_bop_prune_1 2026-11', // Nov–Dec, Bird of paradise
     'task_daf_prune_1 2026-11', // Nov–Dec, Daffodil
-    'task_war_prune_1 2026-11', // Nov–Dec, Waratah
-    'task_nhib_prune_1 2026-11', // Nov–Jan
-    'task_pel_prune_1 2026-11', // Nov–Feb
+    'task_pro_prune_1 2026-11', // Nov–Jan, Protea
+    'task_sun_thin_1 2026-11', // Nov–Jan, Sunflower
+    'task_war_prune_1 2026-11', // Nov–Jan, Waratah
+    'task_pel_prune_1 2026-11', // Nov–Apr, Pelargonium
+    'task_gra_prune_2 2026-12', // Dec–Jan, Grapevine
+    'task_nhib_prune_1 2026-12', // Dec–Jan, Native hibiscus
     'task_sun_water_1 2026-12', // Dec–Jan, Sunflower
-    'task_bnf_water_1 2026-12', // Dec–Feb, Birds nest fern
+    'task_bir_water_1 2026-12', // Dec–Feb, Birch
+    'task_bnf_water_1 2026-12', // Dec–Feb, Bird's nest fern
     'task_hyd_water_1 2026-12', // Dec–Feb, Hydrangea
-    'task_stf_water_1 2026-12', // Dec–Feb, Soft tree fern
+    'task_bt_water_1 2026-12', // Dec–Mar, Baby's tears
+    'task_stf_water_1 2026-12', // Dec–Mar, Soft tree fern
     'task_arum_prune_1 2027-01', // Jan–Feb, Arum lily
-    'task_kang_prune_1 2027-01', // Jan–Mar
+    'task_cor_prune_2 2027-01', // Jan–Feb, Cabbage tree (red)
+    'task_kang_prune_1 2027-01', // Jan–Mar, Kangaroo paw
   ]);
 });
 
@@ -289,7 +308,7 @@ test('LG-03: a log entry is shown with its plant name and task title', () => {
   const k = instanceKey('waratah', 'task_war_prune_1', toAbs(2026, 11));
   const done = completeTask(lib, s, k, d(2026, 11, 11));
   assert.deepEqual(describeLogEntry(lib, done, done.log[0]!),
-    { plantName: 'Waratah', taskTitle: 'Post-flower hard prune', taskType: 'pruning' });
+    { plantName: 'Waratah', taskTitle: 'Prune after flowering', taskType: 'pruning' });
 });
 
 test('LG-03: a log entry whose plant has left the library still shows (by its ids)', () => {

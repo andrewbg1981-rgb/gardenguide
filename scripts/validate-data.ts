@@ -12,4 +12,5 @@ if (errors.length) {
 }
 const lib = data as { plants: { tasks: unknown[] }[] };
 const tasks = lib.plants.reduce((n, p) => n + p.tasks.length, 0);
-console.log(`plants.json is valid: ${lib.plants.length} plants, ${tasks} tasks`);
+const zones = (data as { zones?: unknown[] }).zones?.length ?? 0;
+console.log(`plants.json is valid: ${lib.plants.length} plants, ${tasks} tasks, ${zones} zones`);
