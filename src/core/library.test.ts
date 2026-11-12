@@ -9,6 +9,10 @@ test('DM-01: data/plants.json is valid JSON that passes every check', () => {
   assert.deepEqual(validateLibrary(realLibrary()), []);
 });
 
+// Tests on the real database check rules every version of the data must obey.
+// They never pin values the owner edits in the spreadsheet (zones, months, counts),
+// so editing the spreadsheet does not break them. Exact expectations use test data.
+
 test('DM-02: every plant has its characteristics and at least one task', () => {
   for (const p of realLibrary().plants) {
     assert.ok(p.name && p.category, p.id);
@@ -20,19 +24,6 @@ test('DM-02: every plant has its characteristics and at least one task', () => {
 test('DM-02: the database covers pruning, fertilising and watering', () => {
   const types = new Set(realLibrary().plants.flatMap((p) => p.tasks.map((t) => t.type)));
   for (const t of ['pruning', 'fertilising', 'watering']) assert.ok(types.has(t as never), t);
-});
-
-test('DM-02: the spreadsheet conversion kept every plant, task and zone', () => {
-  const lib = realLibrary();
-  assert.equal(lib.plants.length, 27);
-  assert.equal(lib.plants.reduce((n, p) => n + p.tasks.length, 0), 43);
-  assert.equal(lib.zones.length, 9);
-  assert.deepEqual(lib.plants.find((p) => p.id === 'hydrangea')?.soil.ph, { min: 5, max: 7, note: 'colour depends on pH' });
-});
-
-test('KB-01: the seven plants added in November 2026 are in the database', () => {
-  const ids = new Set(realLibrary().plants.map((p) => p.id));
-  for (const id of ['birch', 'grapevine', 'agave', 'baby_tears', 'aloe', 'cycad', 'cordyline']) assert.ok(ids.has(id), id);
 });
 
 test('D-07: the library records its hemisphere and location', () => {
@@ -75,7 +66,7 @@ test('KB-05: every plant and task records a source and a confidence', () => {
 
 test('ZN-01 / ZN-03: zones have unique ids and sensible sun ranges', () => {
   const lib = clone(realLibrary());
-  assert.deepEqual(lib.zones.map((z) => z.id).slice(0, 5), ['floral', 'shade', 'tropical', 'vegetable', 'fruit']);
+  assert.ok(lib.zones.length > 0);
   lib.zones.push(clone(lib.zones[0]!));
   lib.zones[1]!.sun = { min: 80, max: 20, note: null };
   const errors = validateLibrary(lib);
@@ -85,15 +76,20 @@ test('ZN-01 / ZN-03: zones have unique ids and sensible sun ranges', () => {
 
 test('ZN-01: a plant can only be placed in a zone that exists', () => {
   const lib = clone(realLibrary());
-  lib.plants[0]!.zone = 'shade';
+  lib.plants[0]!.zone = lib.zones[0]!.id;
   assert.deepEqual(validateLibrary(lib), []);
   lib.plants[0]!.zone = 'moon';
   assert.ok(validateLibrary(lib).some((e) => e.includes("zone 'moon'")));
 });
 
-test('ZN-03: the fruit zone records the owner-confirmed sheltered wind exposure', () => {
-  const fruit = realLibrary().zones.find((z) => z.id === 'fruit')!;
-  assert.deepEqual(fruit.wind, { level: 'sheltered', confirmed: true });
+test('ZN-03: every zone records wind and salt exposure as estimated or confirmed; bad levels are rejected', () => {
+  for (const z of realLibrary().zones) {
+    assert.equal(typeof z.wind.confirmed, 'boolean', z.id);
+    assert.equal(typeof z.salt.confirmed, 'boolean', z.id);
+  }
+  const lib = clone(realLibrary());
+  (lib.zones[0]!.wind as { level: string }).level = 'gale';
+  assert.ok(validateLibrary(lib).some((e) => e.includes('wind is not valid')));
 });
 
 test('DM-03: the validator rejects months outside 1–12 and duplicates', () => {

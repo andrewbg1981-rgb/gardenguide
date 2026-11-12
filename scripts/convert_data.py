@@ -4,8 +4,10 @@ The spreadsheet has separate tabs for Plants, Tasks, Zones and Wishlist.
 Columns are found by their header names, so they can be reordered or widened
 freely. Every problem is reported with its tab and row, not just the first.
 
-Usage:  python3 scripts/convert_data.py
-Needs:  Python 3 and openpyxl  (pip install openpyxl)
+Usage:  npm run convert-data
+Needs:  Python 3 and openpyxl. Install openpyxl once with:
+          Windows:        py -m pip install openpyxl
+          Linux / macOS:  python3 -m pip install openpyxl
 """
 
 import json
@@ -13,7 +15,12 @@ import re
 import sys
 from pathlib import Path
 
-import openpyxl
+try:
+    import openpyxl
+except ModuleNotFoundError:
+    sys.exit("openpyxl is not installed. Install it once with:\n"
+             "  Windows:        py -m pip install openpyxl\n"
+             "  Linux / macOS:  python3 -m pip install openpyxl")
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "data" / "source" / "GardenGuide plant database.xlsx"
@@ -295,7 +302,9 @@ def main() -> int:
         "plants": list(plants.values()),
         "wishlist": wishlist,
     }
-    OUTPUT.write_text(json.dumps(library, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    # newline="\n": the same file on Windows and Linux, so git only shows real changes.
+    with open(OUTPUT, "w", encoding="utf-8", newline="\n") as f:
+        f.write(json.dumps(library, indent=2, ensure_ascii=False) + "\n")
     n_tasks = sum(len(p["tasks"]) for p in library["plants"])
     print(f"Wrote {OUTPUT.relative_to(ROOT)}: {len(plants)} plants, {n_tasks} tasks, {len(zones)} zones, {len(wishlist)} wishlist")
     return 0

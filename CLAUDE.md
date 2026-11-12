@@ -22,5 +22,5 @@ software terms briefly the first time they come up; hardware analogies are welco
 - `npm run build` — validate data and build the app into `dist/`
 - `npm test` — run all tests
 - `npm run typecheck` — check types
-- `npm run convert-data` — regenerate `data/plants.json` from the spreadsheet (needs Python 3 + openpyxl)
+- `npm run convert-data` — regenerate `data/plants.json` from the spreadsheet (needs Python 3 + openpyxl; on Windows install openpyxl with `py -m pip install openpyxl`)
 - `npm run validate-data` — check `data/plants.json`

@@ -24,7 +24,7 @@ test('D-01: first use creates one "my plant" per library plant and records the s
   const lib = realLibrary();
   const s = createInitialState(lib, d(2026, 11, 11));
   assert.equal(s.myPlants.length, lib.plants.length);
-  assert.deepEqual(s.myPlants[0], { id: 'elkhorn_fern', speciesId: 'elkhorn_fern' });
+  assert.deepEqual(s.myPlants[0], { id: lib.plants[0]!.id, speciesId: lib.plants[0]!.id });
   assert.equal(s.trackingStart, '2026-11-11');
   assert.deepEqual(s.log, []);
 });
@@ -239,49 +239,29 @@ test('Core: plants missing from the library are ignored rather than crashing', (
 
 // ---------- Real data ----------
 
-test('TD-01: with the real database on 11 Nov 2026, the list matches a hand check', () => {
+test('TD-01 / TL-01 / TL-02: with the real database, every month of the year gives a correct, complete, ordered list', () => {
+  // Checked against the rules directly, so the test holds whatever the spreadsheet says.
   const lib = realLibrary();
-  const active = activeTasks(lib, createInitialState(lib, d(2026, 11, 11)), d(2026, 11, 11));
-  const got = active.map((t) => `${t.task.id} ${t.key.split('|')[2]}`);
-  // Hand check: computed separately in Python straight from the spreadsheet (Nov 2026
-  // database): windows overlapping Oct 2026 – Jan 2027, ordered by window start,
-  // then window end, then plant name, then task title.
-  assert.deepEqual(got, [
-    'task_alo_prune_1 2026-09', // Sep–Oct, Aloe
-    'task_cyc_prune_1 2026-09', // Sep–Oct, Cycad
-    'task_gra_fert_1 2026-09', // Sep–Oct, Grapevine
-    'task_pass_prune_1 2026-09', // Sep–Oct, Passionfruit
-    'task_bop_fert_1 2026-09', // Sep–Nov, Bird of paradise
-    'task_cyc_fert_1 2026-09', // Sep–Nov, Cycad
-    'task_yuc_prune_1 2026-09', // Sep–Nov, Yucca
-    'task_pass_prune_2 2026-09', // Sep–Mar, Passionfruit
-    'task_cor_prune_1 2026-10', // Oct–Nov, Cabbage tree (red)
-    'task_gbop_prune_1 2026-10', // Oct–Nov, Giant bird of paradise
-    'task_pass_fert_1 2026-10', // Oct–Nov, Passionfruit
-    'task_aga_prune_1 2026-10', // Oct–Dec, Agave
-    'task_arum_prune_2 2026-10', // Oct–Dec, Arum lily
-    'task_sun_plant_1 2026-10', // Oct–Dec, Sunflower
-    'task_stag_fert_1 2026-10', // Oct–Jan, Staghorn fern
-    'task_bt_prune_1 2026-10', // Oct–Mar, Baby's tears
-    'task_elk_fert_1 2026-10', // Oct–Mar, Elkhorn fern
-    'task_bop_prune_1 2026-11', // Nov–Dec, Bird of paradise
-    'task_daf_prune_1 2026-11', // Nov–Dec, Daffodil
-    'task_pro_prune_1 2026-11', // Nov–Jan, Protea
-    'task_sun_thin_1 2026-11', // Nov–Jan, Sunflower
-    'task_war_prune_1 2026-11', // Nov–Jan, Waratah
-    'task_pel_prune_1 2026-11', // Nov–Apr, Pelargonium
-    'task_gra_prune_2 2026-12', // Dec–Jan, Grapevine
-    'task_nhib_prune_1 2026-12', // Dec–Jan, Native hibiscus
-    'task_sun_water_1 2026-12', // Dec–Jan, Sunflower
-    'task_bir_water_1 2026-12', // Dec–Feb, Birch
-    'task_bnf_water_1 2026-12', // Dec–Feb, Bird's nest fern
-    'task_hyd_water_1 2026-12', // Dec–Feb, Hydrangea
-    'task_bt_water_1 2026-12', // Dec–Mar, Baby's tears
-    'task_stf_water_1 2026-12', // Dec–Mar, Soft tree fern
-    'task_arum_prune_1 2027-01', // Jan–Feb, Arum lily
-    'task_cor_prune_2 2027-01', // Jan–Feb, Cabbage tree (red)
-    'task_kang_prune_1 2027-01', // Jan–Mar, Kangaroo paw
-  ]);
+  const state = createInitialState(lib, d(2026, 11, 11));
+  for (let month = 1; month <= 12; month++) {
+    const today = d(2027, month, 15);
+    const now = toAbs(2027, month);
+    const active = activeTasks(lib, state, today);
+    // Correct: every listed window overlaps last month .. two months ahead.
+    for (const t of active) assert.ok(t.end >= now - 1 && t.start <= now + 2, `${t.key} in month ${month}`);
+    // Complete: every task with a month in the active period is listed.
+    for (const p of lib.plants) for (const task of p.tasks) {
+      const due = [-1, 0, 1, 2].some((k) => task.months.includes(((month - 1 + k + 12) % 12) + 1));
+      assert.equal(active.some((t) => t.task.id === task.id), due, `${task.id} in month ${month}`);
+    }
+    // Ordered (D-08): window start, then end, then plant name, then task title.
+    for (let i = 1; i < active.length; i++) {
+      const [x, y] = [active[i - 1]!, active[i]!];
+      const cmp = x.start - y.start || x.end - y.end || x.species.name.localeCompare(y.species.name) ||
+        x.task.title.localeCompare(y.task.title);
+      assert.ok(cmp <= 0, `order in month ${month}: ${x.key} before ${y.key}`);
+    }
+  }
 });
 
 // ---------- D-12: undo ----------
@@ -303,10 +283,11 @@ test('D-12: undo only removes "complete" entries — skipped history stays', () 
 // ---------- LG-03: naming log entries ----------
 
 test('LG-03: a log entry is shown with its plant name and task title', () => {
-  const lib = realLibrary();
+  const lib = libraryWith({ waratah: [11] });
+  lib.plants[0]!.name = 'Waratah';
+  lib.plants[0]!.tasks[0]!.title = 'Prune after flowering';
   const s = createInitialState(lib, d(2026, 11, 11));
-  const k = instanceKey('waratah', 'task_war_prune_1', toAbs(2026, 11));
-  const done = completeTask(lib, s, k, d(2026, 11, 11));
+  const done = completeTask(lib, s, key('waratah', 2026, 11), d(2026, 11, 11));
   assert.deepEqual(describeLogEntry(lib, done, done.log[0]!),
     { plantName: 'Waratah', taskTitle: 'Prune after flowering', taskType: 'pruning' });
 });

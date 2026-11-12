@@ -29,7 +29,8 @@ npm test               # run all tests
 npm run typecheck      # check types
 npm run build          # check the data, then build the app into dist/
 npm run preview        # serve the built app (as it will be deployed)
-npm run convert-data   # spreadsheet -> data/plants.json (needs Python 3 + openpyxl)
+npm run convert-data   # spreadsheet -> data/plants.json (needs Python 3 + openpyxl;
+                       #   first time on Windows: py -m pip install openpyxl)
 npm run validate-data  # check data/plants.json
 ```
 
