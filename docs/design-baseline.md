@@ -35,15 +35,17 @@ plants.json (plant library, read-only)      browser storage (user state)
 | D-02 | Each year's occurrence of a task is a **task instance**, identified by plant, task and the **year-month its window starts** (e.g. `waratah|task_war_prune_1|2026-11`). | A Nov–Jan task ticked in December does not reappear in January. |
 | D-03 | A task's months are split into **continuous runs** (wrapping across December→January). Each run is its own instance. | Yucca `3,4,5,9,10,11` = two windows per year. |
 | D-04 | **Active** = not yet logged, and window overlaps [last month … two months ahead]. **Expired** = current month is two or more months after the window's last month. | TL-01, TL-03. The two rules meet exactly, so a task is always either active, future, logged or expired. |
-| D-05 | The **log is the single record** of what happened to an instance. Status values: `complete`, `skipped`. v10 will add `assumed` (routine tasks auto-advanced). | v10 auto-advance changes the expiry rule, not the data model. |
+| D-05 | The **log is the single record** of what happened to an instance. Status values: `complete`, `skipped`, `dismissed` (a critical task deliberately dropped, TK-02; added Nov 2026). v10 may add `assumed`. | v10 auto-advance changes the expiry rule, not the data model. |
 | D-06 | **Tracking starts** the day the user first opens the app. Instances already expired before then are ignored (not logged as skipped). | Avoids a log full of "skipped" history on first use. |
 | D-07 | The plant library records `hemisphere: "south"` and `location`. Months are for the garden's location: Skenes Creek, on the cool-temperate Victorian coast. *(Changed Nov 2026: v1 used Sydney months.)* | v10 location support can shift months by 6 or convert to seasons. |
-| D-08 | Active-list ordering is one replaceable function (v1: earliest start, then earliest end, then plant name, then task title). | v10 urgency ranking (acute → milestones → routine). |
+| D-08 | Active-list ordering is one replaceable function. v1: earliest start, then earliest end, then plant name, then task title. v2 (`byUrgency`, TK-03): critical overdue, critical due now, routine due now or in grace, upcoming; v1 order within each group. | v10 urgency ranking (acute → milestones → routine). |
 | D-09 | All saving/loading goes through one storage module (v1: localStorage). | Swap for IndexedDB or cloud sync later. |
 | D-10 | Soil pH is stored as numbers `{min, max, note}`; files carry `schemaVersion`. Plant library v2 (Nov 2026) adds zones and the KB fields; unknown values are `null`, never guessed. | v10 suitability checks compare numbers; versions allow safe data migration. |
 | D-11 | *(added in increment 3)* Each of My plants may carry `addedOn`. A plant added to the library after first use joins My plants automatically, dated that day, and its expired tasks are only logged from that date (D-06 applied per plant). Plants removed from the library stay in My plants so their log entries still read correctly. | Adding a plant to the spreadsheet must not flood the log with "skipped". v2 inventory sets `addedOn` when the user adds a plant. |
 | D-12 | *(added in increment 4)* A tick can be undone: briefly by un-ticking while it fades out, then by an Undo bar for a few seconds. Undo removes the `complete` log entry; `skipped` entries are never removed. | Phones make accidental taps easy; the log (D-05) must stay trustworthy. |
 | D-13 | *(added in increment 3)* Layering is checked by tests: `src/core` never reads the clock, the DOM or browser storage; `src/storage` is handed a store rather than reaching for `localStorage`; only `src/ui` reads the clock (`clock.ts`). The core is type-checked without browser types. | Keeps the core testable at any date and portable to a phone app. |
+| D-14 | *(added in v2.2)* An unfinished **critical** task stays on the list after its window, until it is completed or dismissed, or until the same plant's next window for that task starts. It is then logged `skipped`, so a missed task never appears twice. Routine tasks keep the v1 expiry rule. | TK-02 without an ever-growing backlog. |
+| D-15 | *(added in v2.4)* The map is the owner's site plan (`public/site-plan.png`) with zone outlines traced from the owner's zone drawing, stored in `src/ui/zoneShapes.ts`. Until zones are drawn in the app (ZN-05), changing an outline is a code change. | ZN-02 now; editable zones later. |
 
 ## Styling (from tab "5. Styling")
 
@@ -93,3 +95,6 @@ v2–v4 follow `docs/requirements-v4.md` (roadmap in section 7).
 - v2.1 Plant database expansion ✅ — new spreadsheet `data/source/GardenGuide plant database.xlsx`
   (tabs: Plants, Tasks, Zones, Wishlist, Lists, Review), library schema v2, critical review of v1 data,
   six plants added. The v1 workbook is kept in `docs/` for its v1 requirements and styling tabs.
+- v2.2 Task list ✅ — critical tasks persist (D-14), urgency ordering, task details, zone filter, dismissal.
+- v2.3 Backup ✅ — export and import of personal data (Log screen).
+- v2.4 Map ✅ — site plan with zones; selecting a zone lists its plants and tasks.

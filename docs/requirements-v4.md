@@ -1,4 +1,4 @@
-# GardenGuide v4 — Requirements (draft B)
+# GardenGuide v4 — Requirements (draft C)
 
 v4 is GardenGuide fitted to one garden and one user: a holiday-home garden at
 Skenes Creek, Victoria. It sits between v1 (task rhythm, delivered) and the v10
@@ -174,8 +174,17 @@ Status: **v2**, **v3** or **v4** is the version expected to deliver it. Type: **
 
 ## 9. Verification (v2)
 
+v2 is complete: every v2 requirement below is verified.
+
 | ID | Verified by |
 |---|---|
 | KB-01, KB-02, KB-03, KB-04, KB-05 | `library.test.ts` (data checks and validator) |
 | KB-06 | `scripts/convert_data.py` (reads the four tabs; reports problems by tab and row) |
 | ZN-01, ZN-03 | `library.test.ts` |
+| ZN-02 | Map screen (`src/ui/MapScreen.tsx`), checked in a browser on phone and desktop sizes, Nov 2026. Zone outlines: D-15. |
+| TK-01, TK-02, TK-03 | `schedule.test.ts` (rule tests on test data, and a whole-year check on the real database) |
+| TK-04 | "Details" on each task card (`src/ui/TaskDetails.tsx`), checked in a browser |
+| TK-06 | Zone filter on the Active tasks screen, checked in a browser |
+| DV-01 | As v1; checked in a browser on phone and desktop sizes |
+| DV-02 | `backup.test.ts`; export/import round trip checked in a browser |
+| LG-02 (`dismissed`) | `schedule.test.ts` (dismissal, undo, and saved-state validity) |

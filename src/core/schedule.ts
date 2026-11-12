@@ -61,14 +61,65 @@ export function earliestFirst(a: TaskInstance, b: TaskInstance): number {
     || a.species.name.localeCompare(b.species.name) || a.task.title.localeCompare(b.task.title);
 }
 
-/** TL-01 / TL-02: tasks to show today. */
+/**
+ * TK-03 / D-08: the v2 ordering. Groups first — critical overdue, critical due
+ * now, routine due now or in its grace month, then upcoming — and within each
+ * group the v1 order (earliestFirst).
+ */
+export function byUrgency(today: CalendarDate): (a: TaskInstance, b: TaskInstance) => number {
+  const rank = (t: TaskInstance) => {
+    const when = timing(t, today);
+    if (when === 'upcoming') return 3;
+    if (!t.task.critical) return 2;
+    return when === 'overdue' ? 0 : 1;
+  };
+  return (a, b) => rank(a) - rank(b) || earliestFirst(a, b);
+}
+
+/** D-06 / D-11: the earliest window end that is tracked for a plant. */
+function firstTrackedEnd(state: UserState, plant: MyPlant): number {
+  const start = dateToAbs(parseDate(state.trackingStart)) - GRACE_MONTHS;
+  return plant.addedOn ? Math.max(start, dateToAbs(parseDate(plant.addedOn)) - GRACE_MONTHS) : start;
+}
+
+/**
+ * D-14: a critical instance is superseded once a later instance of the same
+ * plant's task has started (e.g. next year's window). Until then it persists.
+ */
+function supersededSet(all: readonly TaskInstance[], now: number): Set<string> {
+  const latestStarted = new Map<string, number>();
+  for (const t of all) {
+    if (t.start > now) continue;
+    const id = `${t.plant.id}|${t.task.id}`;
+    latestStarted.set(id, Math.max(latestStarted.get(id) ?? -Infinity, t.start));
+  }
+  return new Set(all.filter((t) => t.start < (latestStarted.get(`${t.plant.id}|${t.task.id}`) ?? -Infinity)).map((t) => t.key));
+}
+
+/** Critical instances whose windows ended before the active period but are still owed (TK-02). */
+function persistingCritical(library: PlantLibrary, state: UserState, now: number): TaskInstance[] {
+  const from = dateToAbs(parseDate(state.trackingStart)) - GRACE_MONTHS;
+  const all = instancesOverlapping(library, state.myPlants, from, now)
+    .filter((t) => t.task.critical);
+  const superseded = supersededSet(all, now);
+  return all.filter((t) => t.end < now - MONTHS_BEFORE && t.end >= firstTrackedEnd(state, t.plant) && !superseded.has(t.key));
+}
+
+/**
+ * TL-01 / TK-02 / TK-03: tasks to show today. Routine tasks: windows overlapping
+ * last month to two months ahead. Critical tasks: the same, plus any earlier
+ * unfinished instance that has not been superseded (D-14).
+ */
 export function activeTasks(
   library: PlantLibrary, state: UserState, today: CalendarDate,
-  order: (a: TaskInstance, b: TaskInstance) => number = earliestFirst,
+  order: (a: TaskInstance, b: TaskInstance) => number = byUrgency(today),
 ): TaskInstance[] {
   const now = dateToAbs(today);
   const logged = new Set(state.log.map((e) => e.key));
-  return instancesOverlapping(library, state.myPlants, now - MONTHS_BEFORE, now + MONTHS_AHEAD)
+  return [
+    ...instancesOverlapping(library, state.myPlants, now - MONTHS_BEFORE, now + MONTHS_AHEAD),
+    ...persistingCritical(library, state, now),
+  ]
     .filter((t) => !logged.has(t.key))
     .sort(order);
 }
@@ -98,28 +149,26 @@ function logEntry(t: TaskInstance, status: LogStatus, today: CalendarDate): LogE
 }
 
 /**
- * TL-03 / LG-01 / LG-02: log every instance that expired un-ticked as 'skipped'.
- * Run this whenever the app opens. Instances that had already expired before
- * tracking started are ignored (D-06). Returns the new state and what was added.
+ * TL-03 / TK-01 / LG-01 / LG-02: log every instance that lapsed un-ticked as 'skipped'.
+ * Routine tasks lapse once more than a month past their window. Critical tasks
+ * lapse only when superseded by their next window (TK-02, D-14).
+ * Run this whenever the app opens. Instances that had already lapsed before
+ * tracking started are ignored (D-06), as are a newly added plant's (D-11).
  */
 export function logExpired(
   library: PlantLibrary, state: UserState, today: CalendarDate,
 ): { state: UserState; added: LogEntry[] } {
   const now = dateToAbs(today);
-  const trackingAbs = dateToAbs(parseDate(state.trackingStart));
-  // Latest window end that counts as expired today, and earliest one that was
-  // still live when tracking started.
+  const from = dateToAbs(parseDate(state.trackingStart)) - GRACE_MONTHS;
   const lastExpiredEnd = now - GRACE_MONTHS - 1;
-  const firstTrackedEnd = trackingAbs - GRACE_MONTHS;
-  if (lastExpiredEnd < firstTrackedEnd) return { state, added: [] };
-
-  // D-11: a plant added later is only tracked from the day it was added.
-  const firstTrackedEndFor = (plant: MyPlant) =>
-    plant.addedOn ? Math.max(firstTrackedEnd, dateToAbs(parseDate(plant.addedOn)) - GRACE_MONTHS) : firstTrackedEnd;
+  if (lastExpiredEnd < from) return { state, added: [] };
 
   const logged = new Set(state.log.map((e) => e.key));
-  const added = instancesOverlapping(library, state.myPlants, firstTrackedEnd, lastExpiredEnd)
-    .filter((t) => t.end >= firstTrackedEndFor(t.plant) && t.end <= lastExpiredEnd && !logged.has(t.key))
+  const all = instancesOverlapping(library, state.myPlants, from, now);
+  const superseded = supersededSet(all.filter((t) => t.task.critical), now);
+  const added = all
+    .filter((t) => t.end >= firstTrackedEnd(state, t.plant) && t.end <= lastExpiredEnd && !logged.has(t.key))
+    .filter((t) => !t.task.critical || superseded.has(t.key))
     .sort(earliestFirst)
     .map((t) => logEntry(t, 'skipped', today));
 
@@ -135,12 +184,23 @@ export function completeTask(
   return { ...state, log: [...state.log, logEntry(task, 'complete', today)] };
 }
 
+/** TK-02 / LG-02: deliberately drop a critical task. Throws for routine or inactive tasks. */
+export function dismissTask(
+  library: PlantLibrary, state: UserState, key: string, today: CalendarDate,
+): UserState {
+  const task = activeTasks(library, state, today).find((t) => t.key === key);
+  if (!task) throw new Error(`Task ${key} is not active, so it cannot be dismissed`);
+  if (!task.task.critical) throw new Error(`Task ${key} is routine; routine tasks lapse on their own`);
+  return { ...state, log: [...state.log, logEntry(task, 'dismissed', today)] };
+}
+
 /**
- * D-12: undo a tick made by mistake. Removes the 'complete' entry so the task
- * is active again (if its window is still active). 'skipped' entries stay.
+ * D-12: undo a tick or a dismissal made by mistake. Removes the 'complete' or
+ * 'dismissed' entry so the task is active again (if it still would be).
+ * 'skipped' entries are never removed.
  */
 export function undoComplete(state: UserState, key: string): UserState {
-  const log = state.log.filter((e) => !(e.key === key && e.status === 'complete'));
+  const log = state.log.filter((e) => !(e.key === key && (e.status === 'complete' || e.status === 'dismissed')));
   return log.length === state.log.length ? state : { ...state, log };
 }
 

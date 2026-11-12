@@ -1,11 +1,12 @@
 // What happens when the app opens and when the user ticks a task: the core's
 // pure functions joined to the storage module. The screens call only these.
 
-import { completeTask, createInitialState, logExpired, undoComplete } from '../core/schedule.ts';
+import { completeTask, createInitialState, dismissTask, logExpired, undoComplete } from '../core/schedule.ts';
 import { dateToString } from '../core/months.ts';
 import { syncMyPlants } from '../core/userState.ts';
 import type { CalendarDate, PlantLibrary, UserState } from '../core/types.ts';
-import { backUpUnreadable, loadState, saveState, type KeyValueStore } from './storage.ts';
+import { parseBackup } from './backup.ts';
+import { STATE_KEY, backUpUnreadable, loadState, saveState, type KeyValueStore } from './storage.ts';
 
 export interface Session {
   state: UserState;
@@ -52,7 +53,35 @@ export function tickTask(
   return { state: next, notices: trySave(store, next) };
 }
 
-/** D-12: undo a tick and save. */
+/** TK-02: dismiss a critical task and save. */
+export function dismissCriticalTask(
+  library: PlantLibrary, store: KeyValueStore, state: UserState, key: string, today: CalendarDate,
+): Session {
+  const next = dismissTask(library, state, key, today);
+  return { state: next, notices: trySave(store, next) };
+}
+
+/**
+ * DV-02: replace the current data with a backup file's contents. The current
+ * data is first copied to a separate key, so an import can never lose it.
+ * Throws (with a plain message) if the file is not a usable backup.
+ */
+export function importBackup(
+  library: PlantLibrary, store: KeyValueStore, current: UserState, text: string, today: CalendarDate,
+): Session {
+  const { state: imported } = parseBackup(text);
+  const notices: string[] = [];
+  try {
+    store.setItem(`${STATE_KEY}.before-import.${dateToString(today)}`, JSON.stringify(current));
+  } catch {
+    notices.push('The data being replaced could not be kept as a copy (storage full or switched off).');
+  }
+  let state = syncMyPlants(library, imported, today);
+  state = logExpired(library, state, today).state;
+  return { state, notices: [...notices, ...trySave(store, state)] };
+}
+
+/** D-12: undo a tick or dismissal and save. */
 export function untickTask(store: KeyValueStore, state: UserState, key: string): Session {
   const next = undoComplete(state, key);
   return { state: next, notices: next === state ? [] : trySave(store, next) };

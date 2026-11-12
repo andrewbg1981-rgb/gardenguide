@@ -11,16 +11,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import plantsData from '../../data/plants.json';
 import { loadLibrary } from '../core/library.ts';
 import type { CalendarDate, PlantLibrary } from '../core/types.ts';
-import { openSession, tickTask, untickTask, type Session } from '../storage/session.ts';
+import { dismissCriticalTask, importBackup, openSession, tickTask, untickTask, type Session } from '../storage/session.ts';
 import type { KeyValueStore } from '../storage/storage.ts';
 import { ActiveScreen } from './ActiveScreen.tsx';
 import { browserStore } from './browserStore.ts';
 import { sameDay, todayLocal } from './clock.ts';
 import { Flourishes } from './Flourishes.tsx';
 import { LogScreen } from './LogScreen.tsx';
+import { MapScreen } from './MapScreen.tsx';
 
-type Screen = 'active' | 'log';
-const screenFromHash = (): Screen => (window.location.hash === '#/log' ? 'log' : 'active');
+type Screen = 'active' | 'log' | 'map';
+const screenFromHash = (): Screen =>
+  window.location.hash === '#/log' ? 'log' : window.location.hash.startsWith('#/map') ? 'map' : 'active';
 
 export function App() {
   const loaded = useMemo(() => {
@@ -90,6 +92,23 @@ function Garden({ library }: { library: PlantLibrary }) {
     }
   }, [library, store, apply]);
 
+  const dismiss = useCallback((key: string) => {
+    try {
+      apply(dismissCriticalTask(library, store, stateRef.current, key, todayRef.current));
+    } catch {
+      // Not dismissable (already gone): nothing to do.
+    }
+  }, [library, store, apply]);
+
+  const importFile = useCallback((text: string): string | null => {
+    try {
+      apply(importBackup(library, store, stateRef.current, text, todayRef.current));
+      return null;
+    } catch (e) {
+      return e instanceof Error ? e.message : String(e);
+    }
+  }, [library, store, apply]);
+
   const untick = useCallback((key: string) => {
     apply(untickTask(store, stateRef.current, key));
   }, [store, apply]);
@@ -103,9 +122,12 @@ function Garden({ library }: { library: PlantLibrary }) {
           <button type="button" className="text-button" onClick={() => setNotices([])}>Dismiss</button>
         </div>
       )}
-      {screen === 'log'
-        ? <LogScreen library={library} state={session.state} />
-        : <ActiveScreen library={library} state={session.state} today={today} onTick={tick} onUndo={untick} />}
+      {screen === 'log' && <LogScreen library={library} state={session.state} today={today} onImport={importFile} />}
+      {screen === 'map' && <MapScreen library={library} state={session.state} today={today} />}
+      {screen === 'active' && (
+        <ActiveScreen library={library} state={session.state} today={today}
+          onTick={tick} onDismiss={dismiss} onUndo={untick} />
+      )}
     </>
   );
 }

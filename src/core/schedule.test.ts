@@ -2,10 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   activeTasks, completeTask, createInitialState, describeLogEntry, earliestFirst, instanceKey, isExpired, logExpired,
-  logNewestFirst, timing, undoComplete,
+  logNewestFirst, timing, undoComplete, dismissTask,
 } from './schedule.ts';
 import { toAbs } from './months.ts';
-import { d, deepFreeze, libraryWith, realLibrary } from './test-helpers.ts';
+import { d, deepFreeze, libraryWith, realLibrary, testTask } from './test-helpers.ts';
+import { validateUserState } from './userState.ts';
 import type { PlantLibrary, TaskInstance, UserState } from './types.ts';
 
 const keys = (ts: TaskInstance[]) => ts.map((t) => t.key);
@@ -239,7 +240,7 @@ test('Core: plants missing from the library are ignored rather than crashing', (
 
 // ---------- Real data ----------
 
-test('TD-01 / TL-01 / TL-02: with the real database, every month of the year gives a correct, complete, ordered list', () => {
+test('TD-01 / TL-01 / TK-02 / TK-03: with the real database, every month of the year gives a correct, complete, ordered list', () => {
   // Checked against the rules directly, so the test holds whatever the spreadsheet says.
   const lib = realLibrary();
   const state = createInitialState(lib, d(2026, 11, 11));
@@ -247,21 +248,100 @@ test('TD-01 / TL-01 / TL-02: with the real database, every month of the year giv
     const today = d(2027, month, 15);
     const now = toAbs(2027, month);
     const active = activeTasks(lib, state, today);
-    // Correct: every listed window overlaps last month .. two months ahead.
-    for (const t of active) assert.ok(t.end >= now - 1 && t.start <= now + 2, `${t.key} in month ${month}`);
+    // Correct: a window overlapping last month .. two months ahead, or (critical only)
+    // an earlier unfinished window whose next one has not yet started (D-14).
+    for (const t of active) {
+      const inPeriod = t.end >= now - 1 && t.start <= now + 2;
+      const nextStart = t.start + 12;
+      assert.ok(inPeriod || (t.task.critical && t.end < now && nextStart > now), `${t.key} in month ${month}`);
+    }
     // Complete: every task with a month in the active period is listed.
     for (const p of lib.plants) for (const task of p.tasks) {
       const due = [-1, 0, 1, 2].some((k) => task.months.includes(((month - 1 + k + 12) % 12) + 1));
-      assert.equal(active.some((t) => t.task.id === task.id), due, `${task.id} in month ${month}`);
+      if (due) assert.ok(active.some((t) => t.task.id === task.id), `${task.id} missing in month ${month}`);
     }
-    // Ordered (D-08): window start, then end, then plant name, then task title.
+    // Ordered (TK-03): critical overdue, critical now, routine now/overdue, upcoming;
+    // then window start, end, plant name, task title (D-08).
+    const rank = (t: TaskInstance) => {
+      const w = timing(t, today);
+      return w === 'upcoming' ? 3 : !t.task.critical ? 2 : w === 'overdue' ? 0 : 1;
+    };
     for (let i = 1; i < active.length; i++) {
       const [x, y] = [active[i - 1]!, active[i]!];
-      const cmp = x.start - y.start || x.end - y.end || x.species.name.localeCompare(y.species.name) ||
-        x.task.title.localeCompare(y.task.title);
+      const cmp = rank(x) - rank(y) || x.start - y.start || x.end - y.end ||
+        x.species.name.localeCompare(y.species.name) || x.task.title.localeCompare(y.task.title);
       assert.ok(cmp <= 0, `order in month ${month}: ${x.key} before ${y.key}`);
     }
   }
+});
+
+// ---------- TK-02 / TK-03 / D-14: critical tasks ----------
+
+/** A library with one critical task 'crit' and one routine task 'rout'. */
+function mixedLibrary(critMonths: number[], routMonths: number[]): PlantLibrary {
+  const lib = libraryWith({ crit: critMonths, rout: routMonths });
+  lib.plants[0]!.tasks[0] = testTask('crit_task', critMonths, 'pruning', true);
+  return lib;
+}
+
+test('TK-02: a critical task stays on the list after its grace month; a routine one lapses', () => {
+  const lib = mixedLibrary([11], [11]);
+  const s = createInitialState(lib, d(2026, 11));
+  const inMarch = activeTasks(lib, s, d(2027, 3));
+  assert.deepEqual(ids(inMarch), ['crit']);
+  assert.equal(timing(inMarch[0]!, d(2027, 3)), 'overdue');
+  const logged = logExpired(lib, s, d(2027, 3)).added.map((e) => `${e.plantId} ${e.status}`);
+  assert.deepEqual(logged, ['rout skipped'], 'the critical task is not logged as skipped');
+});
+
+test('D-14: when its next window starts, an unfinished critical task is logged skipped and replaced', () => {
+  const lib = mixedLibrary([11], []);
+  lib.plants = [lib.plants[0]!];
+  const s = createInitialState(lib, d(2026, 11));
+  const nextYear = d(2027, 11);
+  assert.deepEqual(activeTasks(lib, s, nextYear).map((t) => t.key), [key('crit', 2027, 11)]);
+  const { added } = logExpired(lib, s, nextYear);
+  assert.deepEqual(added.map((e) => `${e.windowStart} ${e.status}`), ['2026-11 skipped']);
+});
+
+test('TK-02 / D-06: critical tasks from before tracking started are not owed', () => {
+  const lib = mixedLibrary([7, 8], []);
+  lib.plants = [lib.plants[0]!];
+  const s = createInitialState(lib, d(2026, 11, 11));    // Jul–Aug 2026 window ended before first use
+  assert.deepEqual(activeTasks(lib, s, d(2027, 1)), []);
+  assert.deepEqual(logExpired(lib, s, d(2027, 1)).added, []);
+});
+
+test('TK-02: a critical task can be dismissed; it is logged as dismissed and leaves the list', () => {
+  const lib = mixedLibrary([11], [11]);
+  const s = createInitialState(lib, d(2026, 11));
+  const k = activeTasks(lib, s, d(2027, 3))[0]!.key;
+  const after = dismissTask(lib, s, k, d(2027, 3));
+  assert.deepEqual(after.log.map((e) => e.status), ['dismissed']);
+  assert.deepEqual(activeTasks(lib, after, d(2027, 3)), []);
+  assert.deepEqual(validateUserState(after), []);
+});
+
+test('TK-02: routine tasks cannot be dismissed (they lapse on their own)', () => {
+  const lib = mixedLibrary([11], [11]);
+  const s = createInitialState(lib, d(2026, 11));
+  assert.throws(() => dismissTask(lib, s, key('rout', 2026, 11), d(2026, 11)), /routine/);
+});
+
+test('D-12: a dismissal can be undone', () => {
+  const lib = mixedLibrary([11], []);
+  const s = createInitialState(lib, d(2026, 11));
+  const k = activeTasks(lib, s, d(2026, 11))[0]!.key;
+  const undone = undoComplete(dismissTask(lib, s, k, d(2026, 11)), k);
+  assert.equal(activeTasks(lib, undone, d(2026, 11)).length, 1);
+});
+
+test('TK-03: order is critical overdue, critical now, routine now, then upcoming', () => {
+  const lib = libraryWith({ a_up: [1], b_rnow: [12], c_cnow: [12], d_cover: [10], e_rover: [11] });
+  lib.plants[2]!.tasks[0]!.critical = true; lib.plants[2]!.tasks[0]!.criticalReason = 'test';
+  lib.plants[3]!.tasks[0]!.critical = true; lib.plants[3]!.tasks[0]!.criticalReason = 'test';
+  const s = createInitialState(lib, d(2026, 10));
+  assert.deepEqual(ids(activeTasks(lib, s, d(2026, 12))), ['d_cover', 'c_cnow', 'e_rover', 'b_rnow', 'a_up']);
 });
 
 // ---------- D-12: undo ----------

@@ -144,7 +144,7 @@ export interface MyPlant {
  * What finally happened to a task instance (D-05).
  * v10 will add 'assumed' for routine tasks that auto-advance.
  */
-export const LOG_STATUSES = ['complete', 'skipped'] as const;
+export const LOG_STATUSES = ['complete', 'skipped', 'dismissed'] as const;
 export type LogStatus = (typeof LOG_STATUSES)[number];
 
 /** A date with no time zone: { year: 2026, month: 11, day: 11 }. */
